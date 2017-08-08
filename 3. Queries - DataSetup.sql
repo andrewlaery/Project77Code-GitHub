@@ -18,6 +18,7 @@ CREATE VIEW V_QUALIFICATIONS0 AS
 		RECORDS_QUALIFICATIONS.qualificationstatus AS QualificationStatus ,
 		RECORDS_CLUBS.name AS Club ,
 		RECORDS_MEMBERS.currentmember AS CurrentMember ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TMI_QUALIFICATIONS.id) AS NameFull_QualificationsID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TMI_QUALIFICATIONS.qualification) AS NameFull_Qualification
 	FROM RECORDS_QUALIFICATIONS
 	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_QUALIFICATIONS.membersID
@@ -76,8 +77,11 @@ CREATE VIEW V_RECORDS_PROJECTS0 AS
 		RECORDS_PROJECTS.itemstatus AS Status1 ,
 		RECORDS_MEMBERS.currentmember AS CurrentMember ,
 		RECORDS_CLUBS.name AS Club ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_QUALIFICATIONS.id) AS NameFull_QualificationsID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_QUALIFICATIONS.qualification) AS NameFull_Qualification ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_PROJECTS.id) AS NameFull_ProjectsID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_PROJECTS.project) AS NameFull_Project ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_ROLES.id) AS NameFull_RolesID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_ROLES.role) AS NameFull_Role
 	FROM RECORDS_PROJECTS
 	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_PROJECTS.membersID
@@ -127,8 +131,11 @@ CREATE VIEW V_RECORDS_PROJECTS1 AS
 		V_RECORDS_PROJECTS0.Status1 AS Status1 ,
 		V_RECORDS_PROJECTS0.CurrentMember AS CurrentMember ,
 		V_RECORDS_PROJECTS0.Club AS Club ,
+		V_RECORDS_PROJECTS0.NameFull_QualificationsID AS NameFull_QualificationsID ,
 		V_RECORDS_PROJECTS0.NameFull_Qualification AS NameFull_Qualification ,
+		V_RECORDS_PROJECTS0.NameFull_ProjectsID AS NameFull_ProjectsID ,
 		V_RECORDS_PROJECTS0.NameFull_Project AS NameFull_Project ,
+		V_RECORDS_PROJECTS0.NameFull_RolesID AS NameFull_RolesID ,
 		V_RECORDS_PROJECTS0.NameFull_Role AS NameFull_Role
 	FROM V_RECORDS_PROJECTS0
 	LEFT JOIN V_QUALIFICATIONS0 ON V_QUALIFICATIONS0.NameFull_Qualification = V_RECORDS_PROJECTS0.NameFull_Qualification;
@@ -145,7 +152,7 @@ CREATE VIEW V_RECORDS_PROJECTS2 AS
         AND (DATE1 = '2017-07-26')
         -- AND (RECORDS_PROJECTS.itemstatus = 'actual');
         -- AND (CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) = 'Donald Jessep');
-    ORDER BY NameFull , Qualification , ManualGroup , Manual , Project;
+    ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
 
 SELECT * FROM V_RECORDS_PROJECTS1;
 SELECT * FROM V_RECORDS_PROJECTS2;
@@ -159,26 +166,28 @@ CREATE VIEW V_MOSTRECENTPROJECT0 AS
 					a.Club ,
 					a.CurrentMember ,
 					a.Track ,
-					a.QualificationOrder ,
+					a.QualificationsOrder ,
 					a.Qualification ,
 					a.QualificationStatus ,
-					a.ManualGroupOrder ,
+					a.ManualGroupsOrder ,
 					a.ManualGroup ,
-					a.ManualOrder ,
+					a.ManualsOrder ,
 					a.Manual ,
-					a.ProjectOrder ,
+					a.ProjectsOrder ,
 					a.Project ,
-					a.RoleOrder ,
+					a.RolesOrder ,
 					a.Role ,
 					a.Status1 ,
 					a.Date1 ,
-					a.Date1Num
+					a.Date1Num ,
+					a.NameFull_ProjectsID ,
+					a.NameFull_RolesID
         FROM V_RECORDS_PROJECTS1 a
         LEFT OUTER JOIN V_RECORDS_PROJECTS1 b
             ON a.NameFull_Project = b.NameFull_Project AND a.Date1Num < b.Date1Num
         WHERE
             (b.NameFull_Project IS NULL)
-        ORDER BY NameFull , Qualification , Manual , Project , Date1Num;
+        ORDER BY NameFull , QualificationsOrder , ManualsOrder , ProjectsOrder , Date1Num;
 
 DROP VIEW IF EXISTS V_MOSTRECENTPROJECT1;
 CREATE VIEW V_MOSTRECENTPROJECT1 AS
@@ -198,24 +207,26 @@ SELECT * FROM V_MOSTRECENTPROJECT1;
 DROP VIEW IF EXISTS V_MOSTRECENTROLE0;
 CREATE VIEW V_MOSTRECENTROLE0 AS
     SELECT
-            a.NameFull AS NameFull ,
-            a.Club AS Club ,
-            a.CurrentMember AS CurrentMember ,
-						a.Track AS Track ,
-						a.QualificationOrder AS QualificationOrder
-            a.Qualification AS Qualification ,
-						a.RoleOrder AS RoleOrder ,
-            a.Role AS Role ,
-            a.Status1 AS Status1 ,
-            a.Date1 AS Date1 ,
-            a.Date1Num AS Date1Num ,
-            CONCAT(a.NameFull , ' - ' , a.Role) as NameFull_Role
-        FROM V_RECORDS_PROJECTS1 a
-        LEFT OUTER JOIN V_RECORDS_PROJECTS1 b
-            ON a.NameFull_Role = b.NameFull_Role AND a.Date1Num < b.Date1Num
-        WHERE
-            (b.NameFull_Role IS NULL)
-        ORDER BY Role , Date1Num , NameFull;
+			a.NameFull AS NameFull ,
+			a.Club AS Club ,
+			a.CurrentMember AS CurrentMember ,
+			a.Track AS Track ,
+			a.QualificationsOrder AS QualificationsOrder ,
+			a.Qualification AS Qualification ,
+			a.RolesOrder AS RolesOrder ,
+			a.Role AS Role ,
+			a.Status1 AS Status1 ,
+			a.Date1 AS Date1 ,
+			a.Date1Num AS Date1Num ,
+			a.NameFull_Role as NameFull_Role ,
+			a.NameFull_ProjectsID AS NameFull_ProjectsID ,
+			a.NameFull_RolesID as NameFull_RolesID
+    FROM V_RECORDS_PROJECTS1 a
+    LEFT OUTER JOIN V_RECORDS_PROJECTS1 b
+        ON a.NameFull_Role = b.NameFull_Role AND a.Date1Num < b.Date1Num
+    WHERE
+        (b.NameFull_Role IS NULL)
+    ORDER BY RolesOrder , Date1Num , NameFull;
 
 DROP VIEW IF EXISTS V_MOSTRECENTROLE1;
 CREATE VIEW V_MOSTRECENTROLE1 AS
@@ -227,7 +238,7 @@ CREATE VIEW V_MOSTRECENTROLE1 AS
             AND (Qualification <> 'No qualification')
             AND (Role <> 'No role')
         GROUP BY NameFull , Role
-        ORDER BY Role , Date1Num , NameFull;
+        ORDER BY RolesOrder , Date1Num , NameFull;
 
 SELECT * FROM V_MOSTRECENTROLE0;
 SELECT * FROM V_MOSTRECENTROLE1;
