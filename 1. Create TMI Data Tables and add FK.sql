@@ -401,17 +401,23 @@ SELECT STATEMENT CONNECTING ALL TABLES
 DROP VIEW IF EXISTS V_TMI_STRUCTURE0;
 CREATE VIEW V_TMI_STRUCTURE0 AS
 	SELECT
-		TMI_TRACKS.tmiorder AS TrackOrder ,
+		TMI_TRACKS.id AS TracksID ,
+		TMI_TRACKS.tmiorder AS TracksOrder ,
 		TMI_TRACKS.track AS Track ,
 		TMI_QUALIFICATIONS.id AS QualificationsID ,
+		TMI_QUALIFICATIONS.tmiorder AS QualificationsOrder ,
 		TMI_QUALIFICATIONS.qualification AS Qualification ,
 		TMI_MANUAL_GROUPS.id AS ManualGroupsID ,
+		TMI_MANUAL_GROUPS.tmiorder AS ManualGroupsOrder ,
 		TMI_MANUAL_GROUPS.manual_group AS ManualGroup ,
 		TMI_MANUALS.id AS ManualsID ,
+		TMI_MANUALS.tmiorder AS ManualsOrder ,
 		TMI_MANUALS.manual AS Manual ,
-		TMI_PROJECTS.id AS projectsID ,
+		TMI_PROJECTS.id AS ProjectsID ,
+		TMI_PROJECTS.tmiorder AS ProjectsOrder ,
 		TMI_PROJECTS.project AS Project ,
 		TMI_ROLES.id AS RolesID ,
+		TMI_ROLES.tmiorder AS RolesOrder ,
 		TMI_ROLES.role AS Role
 	FROM TMI_PROJECTS
 	LEFT JOIN TMI_ROLES ON TMI_ROLES.id = TMI_PROJECTS.rolesID

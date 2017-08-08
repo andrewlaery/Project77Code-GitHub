@@ -8,10 +8,12 @@ DROP VIEW IF EXISTS V_QUALIFICATIONS0;
 CREATE VIEW V_QUALIFICATIONS0 AS
 	SELECT
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
+		TMI_TRACKS.id AS TracksID ,
+		TMI_TRACKS.tmiorder AS TracksOrder ,
 		TMI_TRACKS.track AS Track ,
-		TMI_TRACKS.tmiorder AS TrackOrder ,
+		TMI_QUALIFICATIONS.id AS QualificationsID ,
+		TMI_QUALIFICATIONS.tmiorder AS QualificationsOrder ,
 		TMI_QUALIFICATIONS.qualification AS Qualification ,
-		TMI_QUALIFICATIONS.tmiorder AS QualificationOrder ,
 		RECORDS_QUALIFICATIONS.qualificationdate AS QualificationDate,
 		RECORDS_QUALIFICATIONS.qualificationstatus AS QualificationStatus ,
 		RECORDS_CLUBS.name AS Club ,
@@ -39,68 +41,91 @@ SELECT * FROM V_QUALIFICATIONS1 ORDER BY NameFull , Qualification;
 DROP VIEW IF EXISTS V_RECORDS_PROJECTS0;
 CREATE VIEW V_RECORDS_PROJECTS0 AS
 	SELECT
-		RECORDS_PROJECTS.id  AS ID ,
+		RECORDS_PROJECTS.id AS RP_ID ,
 		RECORDS_PROJECTS.membersID AS MembersID ,
-    CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
+
+		TMI_TRACKS.id AS TracksID ,
+		TMI_TRACKS.tmiorder AS TracksOrder ,
 		TMI_TRACKS.track AS Track ,
-		TMI_TRACKS.tmiorder AS TrackOrder ,
-		RECORDS_PROJECTS.qualificationsID AS qualificationsID ,
-		TMI_QUALIFICATIONS.tmiorder AS QualificationOrder ,
+
+		RECORDS_PROJECTS.qualificationsID AS RP_QualificationsID ,
+		TMI_QUALIFICATIONS.id AS QualificationsID ,
+		TMI_QUALIFICATIONS.tmiorder AS QualificationsOrder ,
 		TMI_QUALIFICATIONS.qualification AS Qualification ,
-		TMI_MANUAL_GROUPS.tmiorder AS ManualGroupOrder ,
+
+		TMI_MANUAL_GROUPS.id AS ManualGroupsID ,
+		TMI_MANUAL_GROUPS.tmiorder AS ManualGroupsOrder ,
 		TMI_MANUAL_GROUPS.manual_group AS ManualGroup ,
-		TMI_MANUALS.tmiorder AS ManualOrder ,
-    TMI_MANUALS.manual AS Manual ,
-		RECORDS_PROJECTS.projectsID AS ProjectsID ,
+
+		TMI_MANUALS.id AS ManualsID ,
+		TMI_MANUALS.tmiorder AS ManualsOrder ,
+		TMI_MANUALS.manual AS Manual ,
+
+		RECORDS_PROJECTS.projectsID AS RP_ProjectsID ,
+		TMI_PROJECTS.id AS ProjectsID ,
 		TMI_PROJECTS.tmiorder AS ProjectOrder ,
 		TMI_PROJECTS.project AS Project ,
-		RECORDS_PROJECTS.rolesID AS RolesID,
-		TMI_ROLES.tmiorder AS RoleOrder ,
+
+		RECORDS_PROJECTS.rolesID AS RP_RolesID,
+		TMI_ROLES.id AS RolesID ,
+		TMI_ROLES.tmiorder AS RolesOrder ,
 		TMI_ROLES.role AS Role ,
-    RECORDS_PROJECTS.projectdate AS Date1 ,
-    RECORDS_PROJECTS.itemstatus AS Status1 ,
-    RECORDS_MEMBERS.currentmember AS CurrentMember ,
-    RECORDS_CLUBS.name AS Club ,
+
+		RECORDS_PROJECTS.projectdate AS Date1 ,
+		RECORDS_PROJECTS.itemstatus AS Status1 ,
+		RECORDS_MEMBERS.currentmember AS CurrentMember ,
+		RECORDS_CLUBS.name AS Club ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_QUALIFICATIONS.qualification) AS NameFull_Qualification ,
-    CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_PROJECTS.project) AS NameFull_Project ,
-    CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_ROLES.role) AS NameFull_Role
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_PROJECTS.project) AS NameFull_Project ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_ROLES.role) AS NameFull_Role
 	FROM RECORDS_PROJECTS
 	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_PROJECTS.membersID
 	LEFT JOIN TMI_QUALIFICATIONS ON TMI_QUALIFICATIONS.id = RECORDS_PROJECTS.qualificationsID
 	LEFT JOIN TMI_TRACKS ON TMI_TRACKS.id = TMI_QUALIFICATIONS.tracksID
 	LEFT JOIN TMI_PROJECTS ON TMI_PROJECTS.id = RECORDS_PROJECTS.projectsID
 	LEFT JOIN TMI_ROLES ON TMI_ROLES.id = RECORDS_PROJECTS.rolesID
-  LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID
-  LEFT JOIN TMI_MANUALS ON TMI_MANUALS.id = TMI_PROJECTS.manualsID
-  LEFT JOIN TMI_MANUAL_GROUPS ON TMI_MANUAL_GROUPS.id = TMI_MANUALS.manual_groupsID;
+	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID
+	LEFT JOIN TMI_MANUALS ON TMI_MANUALS.id = TMI_PROJECTS.manualsID
+	LEFT JOIN TMI_MANUAL_GROUPS ON TMI_MANUAL_GROUPS.id = TMI_MANUALS.manual_groupsID;
 SELECT * FROM V_RECORDS_PROJECTS0;
 
 DROP VIEW IF EXISTS V_RECORDS_PROJECTS1;
 CREATE VIEW V_RECORDS_PROJECTS1 AS
 	SELECT
-		V_RECORDS_PROJECTS0.ID AS ID ,
+		V_RECORDS_PROJECTS0.RP_ID AS RP_ID ,
 		V_RECORDS_PROJECTS0.MembersID AS MembersID ,
 		V_RECORDS_PROJECTS0.NameFull AS NameFull ,
+
+		V_RECORDS_PROJECTS0.TracksID AS TracksID ,
+		V_RECORDS_PROJECTS0.TracksOrder AS TracksOrder ,
 		V_RECORDS_PROJECTS0.Track AS Track ,
-		V_RECORDS_PROJECTS0.TrackOrder AS TrackOrder ,
+
 		V_RECORDS_PROJECTS0.QualificationsID AS QualificationsID ,
-		V_RECORDS_PROJECTS0.QualificationOrder AS QualificationOrder ,
+		V_RECORDS_PROJECTS0.QualificationsOrder AS QualificationsOrder ,
 		V_RECORDS_PROJECTS0.Qualification AS Qualification ,
-		V_RECORDS_PROJECTS0.ManualGroupOrder AS ManualGroupOrder ,
-    V_RECORDS_PROJECTS0.ManualGroup AS ManualGroup ,
-		V_RECORDS_PROJECTS0.ManualOrder AS ManualOrder ,
-    V_RECORDS_PROJECTS0.Manual AS Manual ,
+
+		V_RECORDS_PROJECTS0.ManualGroupsID AS ManualGroupsID ,
+		V_RECORDS_PROJECTS0.ManualGroupsOrder AS ManualGroupsOrder ,
+		V_RECORDS_PROJECTS0.ManualGroup AS ManualGroup ,
+
+		V_RECORDS_PROJECTS0.ManualsID AS ManualsID ,
+		V_RECORDS_PROJECTS0.ManualsOrder AS ManualsOrder ,
+		V_RECORDS_PROJECTS0.Manual AS Manual ,
+
 		V_RECORDS_PROJECTS0.ProjectsID AS ProjectsID ,
-		V_RECORDS_PROJECTS0.ProjectOrder AS ProjectOrder ,
+		V_RECORDS_PROJECTS0.ProjectOrder AS ProjectsOrder ,
 		V_RECORDS_PROJECTS0.Project AS Project ,
+
 		V_RECORDS_PROJECTS0.RolesID AS RolesID ,
-		V_RECORDS_PROJECTS0.RoleOrder AS RoleOrder ,
+		V_RECORDS_PROJECTS0.RolesOrder AS RolesOrder ,
 		V_RECORDS_PROJECTS0.Role AS Role ,
+
 		V_QUALIFICATIONS0.qualificationstatus AS QualificationStatus ,
 		V_RECORDS_PROJECTS0.Date1 AS Date1 ,
-    CAST(V_RECORDS_PROJECTS0.Date1 AS unsigned) AS Date1Num ,
-    V_RECORDS_PROJECTS0.Status1 AS Status1 ,
-    V_RECORDS_PROJECTS0.CurrentMember AS CurrentMember ,
+		CAST(V_RECORDS_PROJECTS0.Date1 AS unsigned) AS Date1Num ,
+		V_RECORDS_PROJECTS0.Status1 AS Status1 ,
+		V_RECORDS_PROJECTS0.CurrentMember AS CurrentMember ,
 		V_RECORDS_PROJECTS0.Club AS Club ,
 		V_RECORDS_PROJECTS0.NameFull_Qualification AS NameFull_Qualification ,
 		V_RECORDS_PROJECTS0.NameFull_Project AS NameFull_Project ,
