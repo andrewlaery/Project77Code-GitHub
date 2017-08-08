@@ -1,0 +1,63 @@
+/*
+DISPLAY ALL COMPLETED PROJECTS. INCLUDES LINES WHEN A PROJECT HAS BEEN COMPLETED MULTIPLE TIMES.
+*/
+
+DROP VIEW IF EXISTS view_members_qualification_status;
+CREATE VIEW view_members_qualification_status AS
+    SELECT 
+            CONCAT(records_members.namefirst , " " , records_members.namelast) AS FullName,
+            tmi_qualifications.qualification AS Qualification ,
+            qualificationstatus AS Status1 ,
+            qualificationdate AS Date1 ,
+            CONCAT(records_members.namefirst , " " , records_members.namelast , " - " , tmi_qualifications.qualification) AS NameFull_Qual
+        FROM records_qualifications
+        JOIN records_members ON records_members.id = records_qualifications.membersID
+        JOIN tmi_qualifications ON tmi_qualifications.id = records_qualifications.qualificationsID;
+SELECT * 
+    FROM view_members_qualification_status ;
+
+
+DROP VIEW IF EXISTS view_member_qual_project_status ;
+CREATE VIEW view_member_qual_project_status AS
+	SELECT
+		CONCAT(records_members.namefirst , " " , records_members.namelast) AS NameFull, 
+		tmi_qualifications.qualification AS Qualification, 
+		tmi_projects.project AS Project, 
+		projectdate AS Date1,
+		CONCAT(records_members.namefirst , " " , records_members.namelast, " - " , tmi_qualifications.qualification) AS NameFull_Qual
+	FROM records_projects
+	JOIN records_members ON records_members.id = records_projects.membersID
+    JOIN tmi_projects ON tmi_projects.id = records_projects.projectsID
+    JOIN tmi_manuals ON  tmi_manuals.id = tmi_projects.manualsID
+    JOIN tmi_manual_groups ON tmi_manual_groups.id = tmi_manuals.manual_groupsID
+    JOIN tmi_quals_manualgroups ON tmi_quals_manualgroups.manual_groupID = tmi_manual_groups.id 
+    JOIN tmi_qualifications ON tmi_qualifications.id = tmi_quals_manualgroups.qualificationID
+    JOIN tmi_tracks ON tmi_tracks.id = tmi_qualifications.tracksID;
+SELECT *
+    FROM view_member_qual_project_status;
+
+
+DROP VIEW IF EXISTS view_completed_projects_qual_status;
+CREATE VIEW view_completed_projects_qual_status AS
+    SELECT 
+        view_member_qual_project_status.NameFull AS NameFull,
+        view_member_qual_project_status.Qualification AS Qualification ,
+        view_member_qual_project_status.Project AS Project,
+        view_member_qual_project_status.Date1 AS Date1,
+        view_members_qualification_status.Status1 AS Status1
+    FROM view_member_qual_project_status
+    JOIN view_members_qualification_status ON view_members_qualification_status.NameFull_Qual = view_member_qual_project_status.NameFull_Qual;
+SELECT 
+        NameFull ,
+        Qualification ,
+        Project , 
+        Date1
+    FROM view_completed_projects_qual_status
+    WHERE 
+        Status1  = 'In progress'
+        AND NameFull = 'Emma Armitage';
+
+
+DROP VIEW IF EXISTS view_members_qualification_status;
+DROP VIEW IF EXISTS view_member_qual_project_status;
+DROP VIEW IF EXISTS view_completed_projects_qual_status;

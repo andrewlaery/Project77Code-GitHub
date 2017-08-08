@@ -1,0 +1,399 @@
+/*==========================================================================================
+1. Create TMI Tables
+2. Establish Foreign Keys between Tables
+3. Run a full SELECT JOIN statement
+=========================================================================================*/
+
+
+
+/*==========================================================================================
+CREATE ALL TMI TABLES
+=========================================================================================*/
+
+
+DROP DATABASE Project77;
+CREATE DATABASE Project77;
+
+DROP TABLE IF EXISTS tmi_tracks ;
+CREATE TABLE tmi_tracks ( id Serial , track VARCHAR(255) , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_tracks ( track ) VALUES ( 'Communication'  );
+INSERT INTO tmi_tracks ( track ) VALUES ( 'Leadership'  );
+SELECT * FROM tmi_tracks ;
+
+
+DROP TABLE IF EXISTS tmi_qualifications ;
+CREATE TABLE tmi_qualifications ( id Serial , qualification VARCHAR(255) , tracksID bigint(40) unsigned , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Competent Communicator'  , '1' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Advanced Communicator Bronze'  , '1' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Advanced Communicator Silver'  , '1' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Advanced Communicator Gold'  , '1' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Competent Leader'  , '2' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Advanced Leader Bronze'  , '2' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Advanced Leader Silver'  , '2' );
+INSERT INTO tmi_qualifications ( qualification , tracksID ) VALUES ( 'Distingushed Toastmaster'  , '2' );
+SELECT * FROM tmi_qualifications ;
+
+
+DROP TABLE IF EXISTS tmi_quals_manualgroups ;
+CREATE TABLE tmi_quals_manualgroups ( id Serial , qualificationID bigint(40) unsigned , manual_groupID bigint(40) unsigned , start_date DATE , end_date DATE , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '1'  , '1' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '2'  , '2' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '3'  , '2' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '3'  , '3' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '3'  , '4' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '4'  , '2' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '4'  , '5' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '4'  , '6' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '5'  , '7' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '6'  , '4' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '6'  , '8' );
+INSERT INTO tmi_quals_manualgroups ( qualificationID , manual_groupID ) VALUES ( '7'  , '9' );
+SELECT * FROM tmi_quals_manualgroups ;
+
+
+DROP TABLE IF EXISTS tmi_manual_groups ;
+CREATE TABLE tmi_manual_groups ( id Serial , manual_group VARCHAR(255) , qualificationsID bigint(40) unsigned , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Competent Communicator'  , '1' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Advanced Communicator'  , '2' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Better Speaker Series'  , '3' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Successful Club Series'  , '3' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Success Communication'  , '4' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Success Leadership'  , '4' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Competent Leader'  , '5' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'Leadership Excellence Series'  , '6' );
+INSERT INTO tmi_manual_groups ( manual_group , qualificationsID ) VALUES ( 'High Performance Leadership Program'  , '7' );
+SELECT * FROM tmi_manual_groups ;
+
+
+DROP TABLE IF EXISTS tmi_manuals ;
+CREATE TABLE tmi_manuals ( id Serial , manual VARCHAR(255) , manual_code VARCHAR(255) , manual_groupsID bigint(40) unsigned , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID , createdby ) VALUES ( 'Competent Communicator'  , '225' , '1' , 'al' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Communicating On Video'  , '226J' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Facilitating Discussion'  , '226D' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Humorous Speeches'  , '226O' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Interpersonal Communication'  , '226M' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID , updated ) VALUES ( 'Interpretive Reading'  , '226L' , '2' , '1' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Persuasive Speaking'  , '226I' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Public Relations'  , '226C' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Speaking to Inform'  , '226B' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Special Occasion Speeches'  , '226N' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Specialty Speeches'  , '226E' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Speeches by Management'  , '226F' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Storytelling'  , '226K' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Technical Presentations'  , '226H' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'The Entertaining Speaker'  , '226A' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'The Professional Speaker'  , '226G' , '2' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Beginning Your Speech'  , '270' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Concluding Your Speech'  , '271' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Controlling Your Fear'  , '272' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Creating An Introduction'  , '277' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Impromptu Speaking'  , '273' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Know Your Audience'  , '275' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Organizing Your Speech'  , '276' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Preparation And Practice'  , '278' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Selecting Your Topic'  , '274' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Using Body Language'  , '279' , '3' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Closing The Sale'  , '293' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Creating The Best Club Climate'  , '294' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Evaluate To Motivate'  , '292' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Finding New Members For Your Club'  , '291' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Going Beyond Our Club'  , '298' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'How To Be A Distinguished Club'  , '299' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Keeping The Commitment'  , '297' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Meeting Roles And Responsibilities'  , '295' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Mentoring'  , '296' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Moments Of Truth'  , '290' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'The Toastmasters Educational Program'  , '300' , '4' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Building Your Thinking Power, Part I: Mental Flexibility'  , '253' , '5' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Building Your Thinking Power, Part Ii: The Power Of Ideas'  , '254' , '5' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'From Speaker To Trainer'  , '257' , '5' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'How To Listen Effectively'  , '242' , '5' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Speechcraft Starter Kit'  , '205' , '5' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'The Art Of Effective Evaluation'  , '251' , '5' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'How To Conduct Productive Meetings'  , '236' , '6' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Improving Your Management Skills'  , '259' , '6' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Leadership, Part I: Characteristics Of Effective Leaders'  , '255' , '6' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Leadership, Part Ii: Developing Your Leadership Skills'  , '256' , '6' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Leadership, Part Iii: Working In The Team Environment'  , '258' , '6' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Parliamentary Procedure In Action'  , '237' , '6' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Competent Leader'  , '265' , '7' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Building A Team'  , '316' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Delegate To Empower'  , '315' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Developing A Mission'  , '312' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Giving Effective Feedback'  , '317' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Goal Setting And Planning'  , '314' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Motivating People'  , '265' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Resolving Conflict'  , '321' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Service And Leadership'  , '320' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'The Leader as a Coach'  , '318' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'The Visionary Leader'  , '311' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'Values and Leadership'  , '313' , '8' );
+INSERT INTO tmi_manuals ( manual , manual_code , manual_groupsID ) VALUES ( 'High Performance Leadership Program'  , '262' , '9' );
+SELECT * FROM tmi_manuals ;
+
+
+DROP TABLE IF EXISTS tmi_projects ;
+CREATE TABLE tmi_projects ( id Serial , project VARCHAR(255) , manualsID bigint(40) unsigned , rolesID bigint(40) unsigned , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 1: The Ice Breaker'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 2: Organize Your Speech'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 3: Get to the Point'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 4: How To Say It'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 5: Your Body Speaks'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 6: Vocal Variety'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 7: Research Your Topic'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 8: Get Comfortable with Visual Aids'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 9: Persuade with Power'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Project 10: Inspire Your Audience'  , '1' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Instruction on the Internet'  , '2' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Straight Talk'  , '2' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Press Conference'  , '2' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Talk Show'  , '2' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'When Youre the Host'  , '2' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Handling Challenging Situations'  , '3' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Reaching a Consensus'  , '3' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Brainstorming Session'  , '3' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Panel Moderator'  , '3' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Problem-Solving Discussion'  , '3' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Keep Them Laughing'  , '4' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Leave Them with a Smile'  , '4' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Make Them Laugh'  , '4' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Humorous Speech'  , '4' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Warm Up Your Audience'  , '4' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Asserting Yourself Effectively'  , '5' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Conversing with Ease'  , '5' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Diffusing Verbal Criticism'  , '5' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Coach'  , '5' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Successful Negotiator'  , '5' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Interpreting Poetry'  , '6' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Read a Story'  , '6' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Monodrama'  , '6' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Oratorical Speech'  , '6' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Play'  , '6' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Addressing the Opposition'  , '7' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Conquering the Cold Call'  , '7' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Effective Salesperson'  , '7' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Persuasive Leader'  , '7' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Winning Proposal'  , '7' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Speaking Under Fire'  , '8' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Crisis Management Speech'  , '8' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Goodwill Speech'  , '8' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Persuasive Approach'  , '8' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Radio Talk Show'  , '8' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'A Fact-Finding Report'  , '9' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Resources for Informing'  , '9' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Abstract Concept'  , '9' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Demonstration Talk'  , '9' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Speech to Inform'  , '9' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Accepting an Award'  , '10' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Mastering the Toast'  , '10' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Presenting an Award'  , '10' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Speaking in Praise'  , '10' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Roast'  , '10' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Introduce the Speaker'  , '11' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Read Out Loud'  , '11' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Sell a Product'  , '11' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Speak Off the Cuff'  , '11' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Uplift the Spirit'  , '11' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Confrontation: The Adversary Relationship'  , '12' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Manage and Motivate'  , '12' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Briefing'  , '12' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Status Report'  , '12' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Technical Speech'  , '12' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Bringing History to Life'  , '13' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Lets Get Personal'  , '13' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Folk Tale'  , '13' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Moral of the Story'  , '13' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Touching Story'  , '13' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Enhancing a technical Talk with the Internet'  , '14' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Presenting a Technical Paper'  , '14' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Non-Technical Audience'  , '14' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Proposal'  , '14' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Technical Briefing'  , '14' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'A Dramatic Talk'  , '15' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Make Them Laugh'  , '15' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Resources for Entertainment'  , '15' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Speaking After Dinner'  , '15' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Entertaining Speech'  , '15' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Speaking to Entertain'  , '16' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Keynote Address'  , '16' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Motivational Speech'  , '16' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Professional Seminar'  , '16' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Sales Training Speech'  , '16' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Beginning Your Speech'  , '17' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Concluding Your Speech'  , '18' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Controlling Your Fear'  , '19' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Creating An Introduction'  , '20' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Impromptu Speaking'  , '21' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Know Your Audience'  , '22' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organizing Your Speech'  , '23' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Preparation And Practice'  , '24' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Selecting Your Topic'  , '25' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Using Body Language'  , '26' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Building Your Thinking Power, Part I: Mental Flexibility'  , '38' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Building Your Thinking Power, Part Ii: The Power Of Ideas'  , '39' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'From Speaker To Trainer'  , '40' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'How To Listen Effectively'  , '41' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Speechcraft Starter Kit'  , '42' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Art Of Effective Evaluation'  , '43' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'How To Conduct Productive Meetings'  , '44' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Improving Your Management Skills'  , '45' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Leadership, Part I: Characteristics Of Effective Leaders'  , '46' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Leadership, Part Ii: Developing Your Leadership Skills'  , '47' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Leadership, Part Iii: Working In The Team Environment'  , '48' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Parliamentary Procedure In Action'  , '49' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Closing The Sale'  , '27' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Creating The Best Club Climate'  , '28' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Evaluate To Motivate'  , '29' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Finding New Members For Your Club'  , '30' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Going Beyond Our Club'  , '31' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'How To Be A Distinguished Club'  , '32' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Keeping The Commitment'  , '33' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Meeting Roles And Responsibilities'  , '34' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Mentoring'  , '35' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Moments Of Truth'  , '36' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Toastmasters Educational Program'  , '37' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Critical Thinking: General Evaluator'  , '50' , '4' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Critical Thinking: Grammarian'  , '50' , '7' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Critical Thinking: Speech Evaluator'  , '50' , '3' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Developing Your Facilitation Skills: Befriend a Guest'  , '50' , '10' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Developing Your Facilitation Skills: General Evaluator'  , '50' , '4' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Developing Your Facilitation Skills: Table Topics Master'  , '50' , '5' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Developing Your Facilitation Skills: Toastmaster'  , '50' , '2' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Giving Feedback: General Evaluator'  , '50' , '4' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Giving Feedback: Grammarian'  , '50' , '7' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Giving Feedback: Speech Evaluator'  , '50' , '3' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Listening and Leadership: Ah-Counter'  , '50' , '8' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Listening and Leadership: Grammarian'  , '50' , '7' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Listening and Leadership: Speech Evaluator'  , '50' , '3' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Listening and Leadership: Table Topics Speaker'  , '50' , '6' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Mentoring: HPL Guidance Committee Member'  , '50' , '22' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Mentoring: Mentor for a New Member'  , '50' , '24' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Mentoring: Mentor for an Existing Member'  , '50' , '25' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Motivating People: General Evaluator'  , '50' , '4' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Motivating People: Membership Campaign Chair'  , '50' , '23' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Motivating People: PR Campaign Chair'  , '50' , '26' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Motivating People: Speech Evaluator'  , '50' , '3' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Motivating People: Toastmaster'  , '50' , '2' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organization and Delegation: Assist the Club’s Webmaster'  , '50' , '11' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organization and Delegation: Help Organize a Club Membership Campaign or Contest'  , '50' , '17' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organization and Delegation: Help Organize a Club PR Campaign'  , '50' , '18' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organization and Delegation: Help Organize a Club Special Event'  , '50' , '19' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organization and Delegation: Help Organize a Club Speech Contest'  , '50' , '20' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Organization and Delegation: Help Produce a Club Newsletter'  , '50' , '21' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Planning and Implementation: General Evaluator'  , '50' , '4' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Planning and Implementation: Speaker'  , '50' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Planning and Implementation: Table Topics Master'  , '50' , '5' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Planning and Implementation: Toastmaster'  , '50' , '2' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Club Newsletter Editor'  , '50' , '12' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Club PR Campaign Chair'  , '50' , '13' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Club Special Event Chair'  , '50' , '14' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Club Speech Contest Chair'  , '50' , '15' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Club Webmaster'  , '50' , '16' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: General Evaluator'  , '50' , '4' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Membership Campaign Chair'  , '50' , '23' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Team Building: Toastmaster'  , '50' , '2' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Time Management: Grammarian'  , '50' , '7' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Time Management: Speaker'  , '50' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Time Management: Table Topics Master'  , '50' , '5' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Time Management: Timer'  , '50' , '9' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Time Management: Toastmaster'  , '50' , '2' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Building A Team'  , '51' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Delegate To Empower'  , '52' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Developing A Mission'  , '53' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Giving Effective Feedback'  , '54' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Goal Setting And Planning'  , '55' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Motivating People'  , '56' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Resolving Conflict'  , '57' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Service And Leadership'  , '58' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Leader as a Coach'  , '59' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'The Visionary Leader'  , '60' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Values and Leadership'  , '61' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Part 1: Learning About Leadership'  , '62' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Part 2: Choosing Your Objectives'  , '62' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Part 3: Winning Commitment'  , '62' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Part 4: Working The Plan'  , '62' , '1' );
+INSERT INTO tmi_projects ( project , manualsID , rolesID ) VALUES ( 'Part 5: Analysing and Presenting Your Results'  , '62' , '1' );
+SELECT * FROM tmi_projects ;
+
+
+DROP TABLE IF EXISTS tmi_roles ;
+CREATE TABLE tmi_roles ( id Serial , role VARCHAR(255) , role_type VARCHAR(255) , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Speaker'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Speech Evaluator'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Toastmaster'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'General Evaluator'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Timer'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Ah-Counter'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Grammarian'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Joke Master'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Word Master'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Table Topics Master'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Table Topics Speaker'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Table Topics Evaluator'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Round Robin Master'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Round Robin Speaker'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Round Robin Evaluator'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Befriend a Guest at a Club Meeting'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Help Organise a Club Speech Contest'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Help Organise a Club Special Event'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Help Organise a Club Membership Campaign or Contest'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Help Organise a Club Public Relations Campaign'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Help Produce the Club Newsletter'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Assist the Clubs Webmaster'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Contest Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Membership Campaign Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Public Relations Campaign Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Mentor for a New Member'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Mentor for an Existing Member'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Guidance Committee Member'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Contest Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Membership Campaign chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Public Relations Campaign Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Speech Contest Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Special Event Chairperson'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Club Newsletter Editor or Webmaster'  , 'Project' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Sergeant at Arms'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'President'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'VP Education'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'VP Membership'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'VP Public Relations'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Secretary'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Treasurer'  , 'Executive Team' );
+INSERT INTO tmi_roles ( role , role_type ) VALUES ( 'Guest'  , 'Other' );
+SELECT * FROM tmi_roles ;
+
+/*==========================================================================================
+ADD FORGIEGN KEY"S TO TABLES
+=========================================================================================*/
+
+ALTER TABLE tmi_projects 
+	ADD FOREIGN KEY ( manualsID ) REFERENCES tmi_manuals ( id ) ,
+   	ADD FOREIGN KEY ( rolesID ) REFERENCES tmi_roles ( id ); 
+
+ALTER TABLE tmi_manuals 
+   	ADD FOREIGN KEY ( manual_groupsID ) REFERENCES tmi_manual_groups ( id ); 
+    
+ALTER TABLE tmi_manual_groups 
+   	ADD FOREIGN KEY ( qualificationsID ) REFERENCES tmi_qualifications ( id ); 
+   	
+ALTER TABLE tmi_qualifications 
+   	ADD FOREIGN KEY ( tracksID ) REFERENCES tmi_tracks ( id ); 
+
+ALTER TABLE tmi_quals_manualgroups
+   	ADD FOREIGN KEY ( qualificationID ) REFERENCES tmi_qualifications ( id ), 
+   	ADD FOREIGN KEY ( manual_groupID ) REFERENCES tmi_manual_groups ( id ); 
+   	
+/*==========================================================================================
+SELECT STATEMENT CONNECTING ALL TABLES
+=========================================================================================*/
+
+SELECT tmi_qualifications.qualification , tmi_manual_groups.manual_group , tmi_manuals.manual , tmi_projects.project
+	FROM tmi_projects
+	JOIN tmi_manuals ON  tmi_manuals.id = tmi_projects.manualsID
+    JOIN tmi_manual_groups ON tmi_manual_groups.id = tmi_manuals.manual_groupsID
+    JOIN tmi_quals_manualgroups ON tmi_quals_manualgroups.manual_groupID = tmi_manual_groups.id 
+    JOIN tmi_qualifications ON tmi_qualifications.id = tmi_quals_manualgroups.qualificationID
+    JOIN tmi_tracks ON tmi_tracks.id = tmi_qualifications.tracksID
+WHERE tmi_qualifications.qualification = 'Advanced Communicator Silver';
+
+

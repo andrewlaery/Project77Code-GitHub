@@ -1,0 +1,48 @@
+/*
+DISPLAY MOST RECENTLY COMPLETED PROJECTS. REMOVES LINES WHEN A PROJECT HAS BEEN COMPLETED MULTIPLE TIMES.
+*/
+
+
+DROP VIEW IF EXISTS view_records_projects1;
+CREATE VIEW view_records_projects1 AS
+    SELECT
+            CONCAT(records_members.namefirst , ' ' , records_members.namelast) AS NameFull , 
+            tmi_qualifications.qualification AS Qualification , 
+            tmi_projects.project AS Project ,
+            tmi_roles.role AS Role ,
+            projectdate AS Date1 ,
+            CONCAT(records_members.namefirst , ' ' , records_members.namelast , ' - ' , tmi_projects.project) AS Concat ,
+            CONCAT(records_members.namefirst , ' ' , records_members.namelast , ' - ' , tmi_roles.role) AS Concat1
+    FROM records_projects
+    INNER JOIN records_members ON records_members.id = records_projects.membersID
+    INNER JOIN tmi_qualifications ON tmi_qualifications.id = records_projects.qualificationsID
+    INNER JOIN tmi_projects ON tmi_projects.id = records_projects.projectsID
+    INNER JOIN tmi_roles ON tmi_projects.rolesID = tmi_roles.id
+    WHERE (tmi_qualifications.qualification NOT IN ("No qualification"))
+    ORDER BY NameFull , Qualification DESC , Project;
+SELECT * FROM view_records_projects1;
+
+
+DROP VIEW IF EXISTS view_most_recent_projects_completed;
+CREATE VIEW view_most_recent_projects_completed AS
+    SELECT
+            a.NameFull ,
+            a.Qualification ,
+            a.Project ,
+            a.Date1
+        FROM view_records_projects1 a
+        LEFT OUTER JOIN view_records_projects1 b
+            ON a.Concat = b.Concat AND a.Date1 < b.Date1
+        WHERE 
+            (b.Concat IS NULL)
+        ORDER BY Qualification , Project , Date1;
+SELECT * 
+    FROM view_most_recent_projects_completed
+    WHERE NameFull = 'Emma Armitage'
+    ORDER BY NameFull, Qualification, Project, Date1;
+    
+
+
+DROP VIEW IF EXISTS view_records_projects1;
+DROP VIEW IF EXISTS view_most_recent_projects_completed;
+

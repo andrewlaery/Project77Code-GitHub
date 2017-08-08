@@ -1,0 +1,121 @@
+Usable Code:
+
+
+
+========================================================================
+SELECT statements
+	SELECT * FROM tablexxx
+	SELECT column1, column2, columnx FROM tablexxx
+
+========================================================================
+Create a 'View only' table which can then be used for queries.
+	CREATE VIEW viewtablexxx AS
+  		SELECT * FROM tablexxx
+  		WHERE column1 = 'xxx';
+	SELECT * FROM viewtablexxx;
+
+========================================================================
+Database and Table information
+	SHOW TABLE STATUS;
+	SHOW TABLE STATUS LIKE '%xxxtextxxx%';
+	SHOW CREATE TABLE tablexxx;
+	DESCRIBE tablexxx;
+
+========================================================================
+DROP and Remove Functions
+	DROP TABLE tmidata;
+	DROP TABLE IF EXISTS tmidata;
+	DROP VIEW viewtablexxx;
+	DROP VIEW IF EXISTS viewtablexxx;
+
+========================================================================
+ALTER TABLE Functions
+	ALTER TABLE data_tmi DROP test;
+
+
+========================================================================
+Extract Capitals from a column and create a new column. Need to update the final SELECT statement at the bottom.
+
+	DELIMITER $$
+	CREATE FUNCTION split_string(split_string varchar(255),my_delimiter varchar(1)) RETURNS varchar(10)
+	BEGIN
+	DECLARE temp_string varchar(255);
+	DECLARE occurance INT;
+	DECLARE i INT;
+	DECLARE temp_result varchar(10);
+	DECLARE final_result varchar(10);
+	SET temp_result = '';
+	SET occurance=length(split_string)-length(replace(split_string,' ',''))+1;
+  		IF occurance > 0 then
+    		set i=1;
+    		while i <= occurance do
+        		set temp_string = (select SUBSTRING_INDEX(SUBSTRING_INDEX(split_string, my_delimiter, i),my_delimiter ,-1));
+        		set temp_result = CONCAT(temp_result, SUBSTRING(temp_string,1,1));
+        		set i=i+1;
+    		end while;
+  		ELSE
+        		set temp_result = SUBSTRING(split_string,1,1);
+  		END IF;
+  		set occurance=0;
+  		SET final_result = temp_result;
+  		RETURN (final_result);
+	END $$
+	DELIMITER ;
+
+	SELECT columnxxx, split_string(columnxxx,' ') as initials FROM tablexxx;
+
+========================================================================
+Select Joined Tables and Where conditions
+
+SELECT tablexxx.column1 , tablexxx.column2 , tablexxx.column3 , tablexxx.column4
+FROM tablexxx1
+JOIN tablexxx2 ON tablexxx1.columnxxx = tablexxx2.columnxxx
+JOIN tablexxx3 ON tablexxx1.columnxxx = tablexxx2.columnxxx
+JOIN tablexxx4 ON tablexxx1.columnxxx = tablexxx2.columnxxx
+JOIN tablexxx5 ON tablexxx1.columnxxx = tablexxx2.columnxxx
+
+WHERE tablexxx1.columnxxx = 'xxx' 
+	AND tablexxx2.columnxxx = 'xxx'
+    OR tablexxx3.columnxxx = 'xxx'
+
+------------------------------------------------------------------------------------------
+For example (actual code):
+
+SELECT * FROM tmi_tracks;
+SELECT * FROM tmi_qualifications;
+SELECT * FROM tmi_manual_groups;
+SELECT * FROM tmi_manuals;
+SELECT * FROM tmi_projects;
+
+SELECT tmi_projects.tmi_project , tmi_manuals.tmi_manual , tmi_projects.tmi_project_role , tmi_manual_groups.tmi_manual_group
+FROM tmi_projects
+JOIN tmi_manuals ON tmi_projects.tmi_manual = tmi_manuals.tmi_manual
+JOIN tmi_manual_groups ON tmi_manuals.tmi_manual_group = tmi_manual_groups.tmi_manual_group
+JOIN tmi_qualifications ON tmi_manual_groups.tmi_qualification = tmi_qualifications.tmi_qualification
+JOIN tmi_tracks ON tmi_qualifications.tmi_track = tmi_tracks.tmi_track
+
+WHERE tmi_tracks.tmi_track = 'Communication' 
+	AND tmi_manual_groups.tmi_manual_group = 'Better Speaker Series' 
+    OR tmi_manual_groups.tmi_manual_group = 'Successful Club Series';
+
+------------------------------------------------------------------------------------------
+Example where the SELECT statement creates a new table....
+
+DROP TABLE IF EXISTS temptest;
+
+CREATE TABLE temptest AS
+
+SELECT tmi_projects.tmi_project , tmi_manuals.tmi_manual , tmi_projects.tmi_project_role , tmi_manual_groups.tmi_manual_group
+FROM tmi_projects
+JOIN tmi_manuals ON tmi_projects.tmi_manual = tmi_manuals.tmi_manual
+JOIN tmi_manual_groups ON tmi_manuals.tmi_manual_group = tmi_manual_groups.tmi_manual_group
+JOIN tmi_qualifications ON tmi_manual_groups.tmi_qualification = tmi_qualifications.tmi_qualification
+JOIN tmi_tracks ON tmi_qualifications.tmi_track = tmi_tracks.tmi_track
+
+WHERE tmi_tracks.tmi_track = 'Communication' 
+	AND tmi_manual_groups.tmi_manual_group = 'Better Speaker Series';
+
+SELECT * FROM temptest;
+
+
+

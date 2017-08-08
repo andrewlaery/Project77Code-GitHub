@@ -1,0 +1,12 @@
+/*==========================================================================================
+SELECT STATEMENT CONNECTING ALL TABLES
+=========================================================================================*/
+
+SELECT tmi_qualifications.qualification , tmi_manual_groups.manual_group , tmi_manuals.manual , tmi_projects.project
+	FROM tmi_projects
+	JOIN tmi_manuals ON  tmi_manuals.id = tmi_projects.manualsID
+    JOIN tmi_manual_groups ON tmi_manual_groups.id = tmi_manuals.manual_groupsID
+    JOIN tmi_quals_manualgroups ON tmi_quals_manualgroups.manual_groupID = tmi_manual_groups.id 
+    JOIN tmi_qualifications ON tmi_qualifications.id = tmi_quals_manualgroups.qualificationID
+    JOIN tmi_tracks ON tmi_tracks.id = tmi_qualifications.tracksID
+WHERE tmi_qualifications.qualification = 'Advanced Communicator Silver';

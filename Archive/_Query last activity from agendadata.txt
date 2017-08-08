@@ -1,0 +1,51 @@
+/*
+FIND THE MOST RECENT TIME A ROLE WAS COMPLETED....
+
+FIRST: ======== Create VIEW of SELECT TABLE TO RUN the MAX FUNCTION =========
+*/
+
+
+DROP VIEW IF EXISTS view_pastagendas;
+CREATE VIEW view_pastagendas AS
+	SELECT 
+    * , 
+    CONCAT(role," - ",namefull) AS RoleName
+	FROM data_pastagendas;
+SELECT * FROM view_pastagendas;
+
+
+/*
+THEN: --------- MAX FUNCTION - Option 1 ---------
+*/
+
+SELECT
+	a.namefull ,
+	a.project ,
+    a.role ,
+    a.meetingdate
+FROM view_pastagendas a
+LEFT OUTER JOIN view_pastagendas b
+    ON a.RoleName = b.RoleName AND a.meetingdate < b.meetingdate
+WHERE 
+	b.RoleName IS NULL 
+    AND a.role = 'Speaker';
+
+
+/*
+OR: --------- MAX FUNCTION - Option 2 ---------
+*/
+
+SELECT 
+	a.namefull ,
+	a.project ,
+    a.role ,
+    a.meetingdate
+FROM view_pastagendas AS a
+INNER JOIN 
+		(SELECT 
+			RoleName,
+			MAX(meetingdate) meetingdate
+		FROM view_pastagendas
+		GROUP BY RoleName) AS b 
+	ON a.RoleName = b.RoleName AND a.meetingdate = b.meetingdate
+WHERE role = 'Speaker';

@@ -1,0 +1,21 @@
+/*
+QUERY MEMBERS FOR QUALFICATION STATUS
+*/
+
+DROP VIEW IF EXISTS members_qualification_status;
+CREATE VIEW members_qualification_status AS
+    SELECT 
+            CONCAT(records_members.namefirst , " " , records_members.namelast) AS NameFull ,
+            tmi_qualifications.qualification AS Qualification ,
+            qualificationstatus AS Status1 ,
+            qualificationdate AS Date1
+        FROM records_qualifications
+        JOIN records_members ON records_members.id = records_qualifications.membersID
+        JOIN tmi_qualifications ON tmi_qualifications.id = records_qualifications.qualificationsID;
+SELECT * 
+    FROM members_qualification_status
+    WHERE Status1 <> 'Not started'
+    ORDER BY NameFull , Qualification;
+ 
+    
+DROP VIEW IF EXISTS members_qualification_status;
