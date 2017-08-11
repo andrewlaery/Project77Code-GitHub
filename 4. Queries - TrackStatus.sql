@@ -23,45 +23,76 @@ CREATE VIEW V_QUALIFICATION_STATUS0 AS
       Date1 ,
       QualificationStatus
   FROM V_MOSTRECENTPROJECT0
-  WHERE
-    (QualificationStatus = 'In progress' OR QualificationStatus = 'Completed')
-    AND (Qualification <> 'No qualification')
-    AND (Role <> 'No role')
-    ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
+  -- WHERE
+    -- (QualificationStatus = 'In progress' OR QualificationStatus = 'Completed')
+    -- AND Qualification <> 'No qualification'
+    -- AND Role <> 'No role'
+  ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
 SELECT * FROM V_QUALIFICATION_STATUS0;
 
-DROP VIEW IF EXISTS V_CC_STATUS0;
-CREATE VIEW V_CC_STATUS0 AS
+DROP VIEW IF EXISTS V_CC_PROJECT_STATUS0;
+CREATE VIEW V_CC_PROJECT_STATUS0 AS
   SELECT *
   FROM V_QUALIFICATION_STATUS0
   WHERE
     NameFull = 'Emma Armitage'
-    AND Track = 'Communication'
-    AND (QualificationStatus = 'In progress')
+    AND QualificationsID = '1'
+    AND QualificationStatus = 'In progress'
     ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
-SELECT * FROM V_CC_STATUS0;
+SELECT * FROM V_CC_PROJECT_STATUS0;
 
--- 2) Advanced Leader Bronze
+-- CC Percentage complete
+DROP VIEW IF EXISTS V_CC_PROJECT_STATUS_PCENT0;
+CREATE VIEW V_CC_PROJECT_STATUS_PCENT0 AS
+	SELECT
+		(SELECT QualificationsID FROM V_QUALIFICATION_STATUS0 WHERE QualificationsID = '1' GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM V_QUALIFICATION_STATUS0 WHERE QualificationsID = '1' GROUP BY Qualification) AS Qualification ,
+        (SELECT COUNT(*) FROM V_QUALIFICATION_STATUS0 WHERE NameFull = 'Emma Armitage' AND QualificationsID = '1' AND QualificationStatus = 'In progress') / '10' AS Percentage;
+SELECT * FROM V_CC_PROJECT_STATUS_PCENT0;
+
+-- 2) Advanced Communicator Bronze (ACB)
+-- Requires CC Qualification and 2 AC Manuals to be completed.
 
 --Creates a view of the completion of the Competent Communicator Qualification from the Qualification Table.
-DROP VIEW IF EXISTS V_CC_QUALIFICATION_STATUS0;
-CREATE VIEW V_CC_QUALIFICATION_STATUS0 AS
+DROP VIEW IF EXISTS V_ACB_CC_STATUS0;
+CREATE VIEW V_ACB_CC_STATUS0 AS
 	SELECT
 		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS QualificationsID ,
 		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = 'Emma Armitage') >= '1', 'Yes', 'No' ) AS  ProjectComplete;
-SELECT * FROM V_CC_QUALIFICATION_STATUS0;
+		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = 'Linda Robert') >= '1', 'Yes', 'No' ) AS  ProjectComplete;
+SELECT * FROM V_ACB_CC_STATUS0;
 
-DROP VIEW IF EXISTS V_ACB_STATUS0;
-CREATE VIEW V_ACB_STATUS0 AS
-  SELECT *
-  FROM V_QUALIFICATION_STATUS0
-  WHERE
-    NameFull = 'Emma Armitage'
-    AND Track = 'Communication'
-    AND (QualificationStatus = 'In progress')
-    ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
-SELECT * FROM V_ACB_STATUS0;
+-- Creates a view of the current ACB AC projects for each member.
+DROP VIEW IF EXISTS V_ACB_AC_STATUS0;
+CREATE VIEW V_ACB_AC_STATUS0 AS
+	SELECT *
+	FROM V_QUALIFICATION_STATUS0
+	WHERE
+		NameFull = 'Linda Robert'
+		AND QualificationsID = '2'
+		AND QualificationStatus = 'In progress'
+	ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
+SELECT * FROM V_ACB_AC_STATUS0;
+
+-- ACB Percentage complete
+DROP VIEW IF EXISTS V_ACB_PROJECT_STATUS_PCENT0;
+CREATE VIEW V_ACB_PROJECT_STATUS_PCENT0 AS
+	SELECT
+		'2' AS QualificationsID ,
+        'Advanced Communicator Bronze' AS Qualification ,
+		((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = 'Linda Robert')
+		+
+		(SELECT COUNT(*) FROM V_QUALIFICATION_STATUS0 WHERE NameFull = 'Linda Robert' AND QualificationsID = '2' AND QualificationStatus = 'In progress'))
+		/
+		'11' AS Percentage;
+SELECT * FROM V_ACB_PROJECT_STATUS_PCENT0;
+
+
+-- 2) Advanced Leader Silver
+
+
+
+
 
 -- --------- LEADERSHIP TRACKS --------------
 
