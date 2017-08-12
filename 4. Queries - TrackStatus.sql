@@ -53,7 +53,7 @@ SELECT * FROM V_CC_PROJECT_STATUS_PCENT0;
 -- 2) Advanced Communicator Bronze (ACB)
 -- Requires CC Qualification and 2 AC Manuals to be completed.
 
---Creates a view of the completion of the Competent Communicator Qualification from the Qualification Table.
+-- Creates a view of the completion of the Competent Communicator Qualification from the Qualification Table.
 DROP VIEW IF EXISTS V_ACB_CC_STATUS0;
 CREATE VIEW V_ACB_CC_STATUS0 AS
 	SELECT
@@ -63,8 +63,8 @@ CREATE VIEW V_ACB_CC_STATUS0 AS
 SELECT * FROM V_ACB_CC_STATUS0;
 
 -- Creates a view of the current ACB AC projects for each member.
-DROP VIEW IF EXISTS V_ACB_AC_STATUS0;
-CREATE VIEW V_ACB_AC_STATUS0 AS
+DROP VIEW IF EXISTS V_ACB_PROJECT_STATUS0;
+CREATE VIEW V_ACB_PROJECT_STATUS0 AS
 	SELECT *
 	FROM V_QUALIFICATION_STATUS0
 	WHERE
@@ -72,7 +72,7 @@ CREATE VIEW V_ACB_AC_STATUS0 AS
 		AND QualificationsID = '2'
 		AND QualificationStatus = 'In progress'
 	ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
-SELECT * FROM V_ACB_AC_STATUS0;
+SELECT * FROM V_ACB_PROJECT_STATUS0;
 
 -- ACB Percentage complete
 DROP VIEW IF EXISTS V_ACB_PROJECT_STATUS_PCENT0;
@@ -88,10 +88,51 @@ CREATE VIEW V_ACB_PROJECT_STATUS_PCENT0 AS
 SELECT * FROM V_ACB_PROJECT_STATUS_PCENT0;
 
 
--- 2) Advanced Leader Silver
+-- 3) Advanced Communicator Silver
+
+--- INCOMPLETE!!!
+
+-- Creates a view of the completion of the Advanced Communicator Bronze Qualification from the Qualification Table.
+DROP VIEW IF EXISTS V_ACS_ACB_STATUS0;
+CREATE VIEW V_ACS_ACB_STATUS0 AS
+	SELECT
+		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '2'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '2'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '2' AND QualificationDate > '0' AND NameFull = 'Linda Robert') >= '1', 'Yes', 'No' ) AS  ProjectComplete;
+SELECT * FROM V_ACS_ACB_STATUS0;
+
+DROP VIEW IF EXISTS V_ACS_PROJECT_STATUS0;
+CREATE VIEW V_ACS_PROJECT_STATUS0 AS
+	SELECT *
+	FROM V_QUALIFICATION_STATUS0
+	WHERE
+		NameFull = 'Mark Hornblow'
+		AND QualificationsID = '3'
+		AND QualificationStatus = 'In progress'
+	ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
+SELECT * FROM V_ACS_PROJECT_STATUS0;
 
 
+DROP VIEW IF EXISTS V_ACB_PROJECT_STATUS_PCENT0;
+CREATE VIEW V_ACB_PROJECT_STATUS_PCENT0 AS
+SELECT Manual , COUNT(*) AS Countx FROM V_ACS_AC_STATUS0 WHERE ManualGroup = 'Advanced Communicator' GROUP BY Manual ORDER BY Countx DESC Limit 2;
+-- SELECT * FROM V_ACB_PROJECT_STATUS_PCENT0;
+SELECT IF((SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT0) >= '10' ,10 , (SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT0)) AS XX1;
 
+
+DROP VIEW IF EXISTS V_ACB_PROJECT_STATUS_PCENT1;
+CREATE VIEW V_ACB_PROJECT_STATUS_PCENT1 AS
+SELECT Manual , COUNT(*) AS Countx FROM V_ACS_AC_STATUS0 WHERE (ManualGroup = 'Better Speaker Series' OR ManualGroup = 'Successful Club Series') GROUP BY Manual ORDER BY Countx DESC Limit 2;
+-- SELECT * FROM V_ACB_PROJECT_STATUS_PCENT1;
+SELECT IF((SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT1) >= '2' , 2 , (SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT1)) AS XX1;
+
+
+SELECT IF((SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT0) >= '10' ,10 , (SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT0)) AS XX1
+UNION
+SELECT IF((SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT1) >= '2' , 2 , (SELECT SUM(Countx) FROM V_ACB_PROJECT_STATUS_PCENT1)) AS XX1;
+
+
+-----INCOMPLETE!!!!
 
 
 -- --------- LEADERSHIP TRACKS --------------
