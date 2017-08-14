@@ -387,4 +387,5 @@ SELECT
   	(SUM(ProjectComplete) / '10') AS Completed
   FROM V_CL_STATUS2;
 
--- ADVANCED LEADERSHIP TRACK
+  -- 2) ADVANCED LEADER BRONZE
+  -- (a) Creates a structure, (b) addes project completion dates, (c) filters to specific member, (d) tests each project progress
