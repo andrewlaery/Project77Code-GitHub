@@ -2,7 +2,7 @@
 
 -- SET UP VARIABLES
 
-SET @NameFull = @NameFull;
+SET @NameFull = 'Emma Armitage';
 
 -- SET UP VIEW
 -- Creates a view of all most recent projects. Could refer directly to the underlying table.
@@ -91,10 +91,10 @@ CREATE TABLE TTX_ACB_PROJECT_STATUS0 AS
 SELECT * FROM TTX_ACB_PROJECT_STATUS0;
 
 
-DROP TABLE IF EXISTS TTX_ACB_AC_PROJECT_STATUS_PCENT0;
-CREATE TABLE TTX_ACB_AC_PROJECT_STATUS_PCENT0 AS
+DROP TABLE IF EXISTS TTX_ACB_AC_PROJECT_STATUS_PCENT1;
+CREATE TABLE TTX_ACB_AC_PROJECT_STATUS_PCENT1 AS
 	SELECT Manual , (COUNT(*) / '5') AS Countx FROM TTX_ACB_PROJECT_STATUS0 WHERE Qualification = 'Advanced Communicator Bronze' AND ManualGroup = 'Advanced Communicator' GROUP BY Manual ORDER BY Countx DESC Limit 2;
-SELECT * FROM TTX_ACB_AC_PROJECT_STATUS_PCENT0;
+SELECT * FROM TTX_ACB_AC_PROJECT_STATUS_PCENT1;
 
 -- Creates a summary UNION table of all the above queries.
 SELECT
@@ -104,7 +104,7 @@ SELECT
 UNION
 SELECT
 	'Advanced Communicator' AS Requirement ,
-	IF((SELECT (SUM(Countx) / '2') FROM TTX_ACB_AC_PROJECT_STATUS_PCENT0) >= '2' , 1 , (SELECT (SUM(Countx) / '2') FROM TTX_ACB_AC_PROJECT_STATUS_PCENT0)) AS ProjectsCompleted;
+	IF((SELECT (SUM(Countx) / '2') FROM TTX_ACB_AC_PROJECT_STATUS_PCENT1) >= '2' , 1 , (SELECT (SUM(Countx) / '2') FROM TTX_ACB_AC_PROJECT_STATUS_PCENT1)) AS ProjectsCompleted;
 
 
 -- 3) ADVANCED COMMUNICATOR SILVER (ACS)
