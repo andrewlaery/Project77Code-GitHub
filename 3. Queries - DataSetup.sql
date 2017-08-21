@@ -1,11 +1,20 @@
 
+-- SET PARAMETERS
+SET @Club = 'Corporate Toastmasters';
+SET @currentclubs = 'Corporate Toastmasters';
+SET @QualificationStatus = 'In progress';
+SET @CurrentMember = 'Yes';
+
 
 /*
 SECTION 1: TMI Data Setup
 */
 
-DROP VIEW IF EXISTS V_TMI_STRUCTURE0;
-CREATE VIEW V_TMI_STRUCTURE0 AS
+-- ========================  TTX_TMI_STRUCTURE 0 ========================
+
+-- Combination of the TMI Data Tables to show the TMI Structure
+DROP TABLE IF EXISTS TTX_TMI_STRUCTURE0;
+CREATE TABLE TTX_TMI_STRUCTURE0 AS
 	SELECT
 		TMI_TRACKS.id AS TracksID ,
 		TMI_TRACKS.tmiorder AS TracksOrder ,
@@ -32,15 +41,17 @@ CREATE VIEW V_TMI_STRUCTURE0 AS
 	LEFT JOIN TMI_QUALS_MANUALGROUPS ON TMI_QUALS_MANUALGROUPS.manual_groupID = TMI_MANUAL_GROUPS.id
 	LEFT JOIN TMI_QUALIFICATIONS ON TMI_QUALIFICATIONS.id = TMI_QUALS_MANUALGROUPS.qualificationID
 	LEFT JOIN TMI_TRACKS ON TMI_TRACKS.id = TMI_QUALIFICATIONS.tracksID;
-SELECT * FROM V_TMI_STRUCTURE0;
+SELECT * FROM TTX_TMI_STRUCTURE0;
 
 /*
 SECTION 1 OF 2: CURRENT MEMBERS, THEIR QUALIFICATIONS AND PROJECTS
 */
 
--- Lists members qualifications.
-DROP VIEW IF EXISTS V_QUALIFICATIONS0;
-CREATE VIEW V_QUALIFICATIONS0 AS
+-- ========================  TTX_QUALIFICATIONS 0-1 ========================
+
+-- Lists members qualifications: ALL
+DROP TABLE IF EXISTS TTX_QUALIFICATIONS0;
+CREATE TABLE TTX_QUALIFICATIONS0 AS
 	SELECT
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
 		TMI_TRACKS.id AS TracksID ,
@@ -60,22 +71,24 @@ CREATE VIEW V_QUALIFICATIONS0 AS
 	LEFT JOIN TMI_QUALIFICATIONS ON TMI_QUALIFICATIONS.id = RECORDS_QUALIFICATIONS.qualificationsID
 	LEFT JOIN TMI_TRACKS ON TMI_TRACKS.id = TMI_QUALIFICATIONS.tracksID
 	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID;
-DROP VIEW IF EXISTS V_QUALIFICATIONS1;
-CREATE VIEW V_QUALIFICATIONS1 AS
+-- Lists members qualifications: from SET Club and 'In Progress'
+DROP TABLE IF EXISTS TTX_QUALIFICATIONS1;
+CREATE TABLE TTX_QUALIFICATIONS1 AS
     SELECT *
-    FROM V_QUALIFICATIONS0
+    FROM TTX_QUALIFICATIONS0
     WHERE
-        (Club = 'Corporate Toastmasters')
-        AND (CurrentMember = 'Yes')
-        AND (QualificationStatus = 'In progress');
-SELECT * FROM V_QUALIFICATIONS0 ORDER BY NameFull , Qualification;
-SELECT * FROM V_QUALIFICATIONS1 ORDER BY NameFull , Qualification;
+        (Club = @Club)
+        AND (CurrentMember = @CurrentMember)
+        AND (QualificationStatus = @QualificationStatus);
+SELECT * FROM TTX_QUALIFICATIONS0 ORDER BY NameFull , Qualification;
+SELECT * FROM TTX_QUALIFICATIONS1 ORDER BY NameFull , Qualification;
 
 
+-- ========================  TTX_RECORDS_PROJECTS 0-2 ========================
 
--- Lists members projects including duplicates
-DROP VIEW IF EXISTS V_RECORDS_PROJECTS0;
-CREATE VIEW V_RECORDS_PROJECTS0 AS
+-- Lists projects including duplicates: ALL MEMBERS
+DROP TABLE IF EXISTS TTX_RECORDS_PROJECTS0;
+CREATE TABLE TTX_RECORDS_PROJECTS0 AS
 	SELECT
 		RECORDS_PROJECTS.id AS RP_ID ,
 		RECORDS_PROJECTS.membersID AS MembersID ,
@@ -127,61 +140,63 @@ CREATE VIEW V_RECORDS_PROJECTS0 AS
 	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID
 	LEFT JOIN TMI_MANUALS ON TMI_MANUALS.id = TMI_PROJECTS.manualsID
 	LEFT JOIN TMI_MANUAL_GROUPS ON TMI_MANUAL_GROUPS.id = TMI_MANUALS.manual_groupsID;
-SELECT * FROM V_RECORDS_PROJECTS0;
+SELECT * FROM TTX_RECORDS_PROJECTS0;
 
-DROP VIEW IF EXISTS V_RECORDS_PROJECTS1;
-CREATE VIEW V_RECORDS_PROJECTS1 AS
+-- Lists projects including duplicates + Qualification Status: ALL MEMBERS
+DROP TABLE IF EXISTS TTX_RECORDS_PROJECTS1;
+CREATE TABLE TTX_RECORDS_PROJECTS1 AS
 	SELECT
-		V_RECORDS_PROJECTS0.RP_ID AS RP_ID ,
-		V_RECORDS_PROJECTS0.MembersID AS MembersID ,
-		V_RECORDS_PROJECTS0.NameFull AS NameFull ,
+		TTX_RECORDS_PROJECTS0.RP_ID AS RP_ID ,
+		TTX_RECORDS_PROJECTS0.MembersID AS MembersID ,
+		TTX_RECORDS_PROJECTS0.NameFull AS NameFull ,
 
-		V_RECORDS_PROJECTS0.TracksID AS TracksID ,
-		V_RECORDS_PROJECTS0.TracksOrder AS TracksOrder ,
-		V_RECORDS_PROJECTS0.Track AS Track ,
+		TTX_RECORDS_PROJECTS0.TracksID AS TracksID ,
+		TTX_RECORDS_PROJECTS0.TracksOrder AS TracksOrder ,
+		TTX_RECORDS_PROJECTS0.Track AS Track ,
 
-		V_RECORDS_PROJECTS0.QualificationsID AS QualificationsID ,
-		V_RECORDS_PROJECTS0.QualificationsOrder AS QualificationsOrder ,
-		V_RECORDS_PROJECTS0.Qualification AS Qualification ,
+		TTX_RECORDS_PROJECTS0.QualificationsID AS QualificationsID ,
+		TTX_RECORDS_PROJECTS0.QualificationsOrder AS QualificationsOrder ,
+		TTX_RECORDS_PROJECTS0.Qualification AS Qualification ,
 
-		V_RECORDS_PROJECTS0.ManualGroupsID AS ManualGroupsID ,
-		V_RECORDS_PROJECTS0.ManualGroupsOrder AS ManualGroupsOrder ,
-		V_RECORDS_PROJECTS0.ManualGroup AS ManualGroup ,
+		TTX_RECORDS_PROJECTS0.ManualGroupsID AS ManualGroupsID ,
+		TTX_RECORDS_PROJECTS0.ManualGroupsOrder AS ManualGroupsOrder ,
+		TTX_RECORDS_PROJECTS0.ManualGroup AS ManualGroup ,
 
-		V_RECORDS_PROJECTS0.ManualsID AS ManualsID ,
-		V_RECORDS_PROJECTS0.ManualsOrder AS ManualsOrder ,
-		V_RECORDS_PROJECTS0.Manual AS Manual ,
+		TTX_RECORDS_PROJECTS0.ManualsID AS ManualsID ,
+		TTX_RECORDS_PROJECTS0.ManualsOrder AS ManualsOrder ,
+		TTX_RECORDS_PROJECTS0.Manual AS Manual ,
 
-		V_RECORDS_PROJECTS0.ProjectsID AS ProjectsID ,
-		V_RECORDS_PROJECTS0.ProjectOrder AS ProjectsOrder ,
-		V_RECORDS_PROJECTS0.Project AS Project ,
+		TTX_RECORDS_PROJECTS0.ProjectsID AS ProjectsID ,
+		TTX_RECORDS_PROJECTS0.ProjectOrder AS ProjectsOrder ,
+		TTX_RECORDS_PROJECTS0.Project AS Project ,
 
-		V_RECORDS_PROJECTS0.RolesID AS RolesID ,
-		V_RECORDS_PROJECTS0.RolesOrder AS RolesOrder ,
-		V_RECORDS_PROJECTS0.Role AS Role ,
+		TTX_RECORDS_PROJECTS0.RolesID AS RolesID ,
+		TTX_RECORDS_PROJECTS0.RolesOrder AS RolesOrder ,
+		TTX_RECORDS_PROJECTS0.Role AS Role ,
 
-		V_QUALIFICATIONS0.qualificationstatus AS QualificationStatus ,
-		V_RECORDS_PROJECTS0.Date1 AS Date1 ,
-		CAST(V_RECORDS_PROJECTS0.Date1 AS unsigned) AS Date1Num ,
-		V_RECORDS_PROJECTS0.Status1 AS Status1 ,
-		V_RECORDS_PROJECTS0.CurrentMember AS CurrentMember ,
-		V_RECORDS_PROJECTS0.Club AS Club ,
-		V_RECORDS_PROJECTS0.NameFull_QualificationsID AS NameFull_QualificationsID ,
-		V_RECORDS_PROJECTS0.NameFull_Qualification AS NameFull_Qualification ,
-		V_RECORDS_PROJECTS0.NameFull_ProjectsID AS NameFull_ProjectsID ,
-		V_RECORDS_PROJECTS0.NameFull_Project AS NameFull_Project ,
-		V_RECORDS_PROJECTS0.NameFull_RolesID AS NameFull_RolesID ,
-		V_RECORDS_PROJECTS0.NameFull_Role AS NameFull_Role
-	FROM V_RECORDS_PROJECTS0
-	LEFT JOIN V_QUALIFICATIONS0 ON V_QUALIFICATIONS0.NameFull_Qualification = V_RECORDS_PROJECTS0.NameFull_Qualification;
+		TTX_QUALIFICATIONS0.qualificationstatus AS QualificationStatus ,
+		TTX_RECORDS_PROJECTS0.Date1 AS Date1 ,
+		CAST(TTX_RECORDS_PROJECTS0.Date1 AS unsigned) AS Date1Num ,
+		TTX_RECORDS_PROJECTS0.Status1 AS Status1 ,
+		TTX_RECORDS_PROJECTS0.CurrentMember AS CurrentMember ,
+		TTX_RECORDS_PROJECTS0.Club AS Club ,
+		TTX_RECORDS_PROJECTS0.NameFull_QualificationsID AS NameFull_QualificationsID ,
+		TTX_RECORDS_PROJECTS0.NameFull_Qualification AS NameFull_Qualification ,
+		TTX_RECORDS_PROJECTS0.NameFull_ProjectsID AS NameFull_ProjectsID ,
+		TTX_RECORDS_PROJECTS0.NameFull_Project AS NameFull_Project ,
+		TTX_RECORDS_PROJECTS0.NameFull_RolesID AS NameFull_RolesID ,
+		TTX_RECORDS_PROJECTS0.NameFull_Role AS NameFull_Role
+	FROM TTX_RECORDS_PROJECTS0
+	LEFT JOIN TTX_QUALIFICATIONS0 ON TTX_QUALIFICATIONS0.NameFull_Qualification = TTX_RECORDS_PROJECTS0.NameFull_Qualification;
 
-DROP VIEW IF EXISTS V_RECORDS_PROJECTS2;
-CREATE VIEW V_RECORDS_PROJECTS2 AS
+-- Lists projects including duplicates + Qualification Status: from SET Club and 'In Progress'
+DROP TABLE IF EXISTS TTX_RECORDS_PROJECTS2;
+CREATE TABLE TTX_RECORDS_PROJECTS2 AS
 	SELECT *
-    FROM V_RECORDS_PROJECTS1
+    FROM TTX_RECORDS_PROJECTS1
     WHERE
-        (Club = 'Corporate Toastmasters')
-        AND (CurrentMember = 'Yes')
+        (Club = @Club)
+        AND (CurrentMember = @CurrentMember)
         AND (Qualification <> 'No qualification')
         AND (Role <> 'No role')
         AND (DATE1 = '2017-07-26')
@@ -189,13 +204,14 @@ CREATE VIEW V_RECORDS_PROJECTS2 AS
         -- AND (CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) = 'Donald Jessep');
     ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
 
-SELECT * FROM V_RECORDS_PROJECTS1;
-SELECT * FROM V_RECORDS_PROJECTS2;
+SELECT * FROM TTX_RECORDS_PROJECTS1;
+SELECT * FROM TTX_RECORDS_PROJECTS2;
 
+-- ========================  TTX_MOSTRECENTPROJECT 0-1 ========================
 
 -- Lists members most recent projects excluding duplicates.
-DROP VIEW IF EXISTS V_MOSTRECENTPROJECT0;
-CREATE VIEW V_MOSTRECENTPROJECT0 AS
+DROP TABLE IF EXISTS TTX_MOSTRECENTPROJECT0;
+CREATE TABLE TTX_MOSTRECENTPROJECT0 AS
     SELECT
 					a.MembersID ,
 					a.NameFull ,
@@ -223,37 +239,44 @@ CREATE VIEW V_MOSTRECENTPROJECT0 AS
 					a.Date1Num ,
 					a.NameFull_ProjectsID ,
 					a.NameFull_RolesID
-        FROM V_RECORDS_PROJECTS1 a
-        LEFT OUTER JOIN V_RECORDS_PROJECTS1 b
+        FROM TTX_RECORDS_PROJECTS1 a
+        LEFT OUTER JOIN TTX_RECORDS_PROJECTS1 b
             ON a.NameFull_Project = b.NameFull_Project AND a.Date1Num < b.Date1Num
         WHERE
             (b.NameFull_Project IS NULL)
         ORDER BY NameFull , QualificationsOrder , ManualsOrder , ProjectsOrder , Date1Num;
 
-DROP VIEW IF EXISTS V_MOSTRECENTPROJECT1;
-CREATE VIEW V_MOSTRECENTPROJECT1 AS
+DROP TABLE IF EXISTS TTX_MOSTRECENTPROJECT1;
+CREATE TABLE TTX_MOSTRECENTPROJECT1 AS
     SELECT *
-        FROM V_MOSTRECENTPROJECT0
+        FROM TTX_MOSTRECENTPROJECT0
         WHERE
-            (Club = 'Corporate Toastmasters')
-            AND (CurrentMember = 'Yes')
+            (Club = @Club)
+            AND (CurrentMember = @CurrentMember)
             AND (Qualification <> 'No qualification')
             AND (Role <> 'No role')
         ORDER BY NameFull , Qualification , Manual , Project , Date1Num;
 
-SELECT * FROM V_MOSTRECENTPROJECT0;
-SELECT * FROM V_MOSTRECENTPROJECT1;
+SELECT * FROM TTX_MOSTRECENTPROJECT0;
+SELECT * FROM TTX_MOSTRECENTPROJECT1;
+
+-- ========================  TTX_MOSTRECENTROLE 0-1 ========================
+
 
 -- Lists members most recent role.
-DROP VIEW IF EXISTS V_MOSTRECENTROLE0;
-CREATE VIEW V_MOSTRECENTROLE0 AS
+DROP TABLE IF EXISTS TTX_MOSTRECENTROLE0;
+CREATE TABLE TTX_MOSTRECENTROLE0 AS
     SELECT
+			a.MembersID AS MembersID,
 			a.NameFull AS NameFull ,
 			a.Club AS Club ,
 			a.CurrentMember AS CurrentMember ,
+			a.TracksID AS TracksID,
 			a.Track AS Track ,
+			a.QualificationsID AS QualificationsID ,
 			a.QualificationsOrder AS QualificationsOrder ,
 			a.Qualification AS Qualification ,
+			a.RolesID AS RolesID ,
 			a.RolesOrder AS RolesOrder ,
 			a.Role AS Role ,
 			a.Status1 AS Status1 ,
@@ -262,35 +285,38 @@ CREATE VIEW V_MOSTRECENTROLE0 AS
 			a.NameFull_Role as NameFull_Role ,
 			a.NameFull_ProjectsID AS NameFull_ProjectsID ,
 			a.NameFull_RolesID as NameFull_RolesID
-    FROM V_RECORDS_PROJECTS1 a
-    LEFT OUTER JOIN V_RECORDS_PROJECTS1 b
+    FROM TTX_RECORDS_PROJECTS1 a
+    LEFT OUTER JOIN TTX_RECORDS_PROJECTS1 b
         ON a.NameFull_Role = b.NameFull_Role AND a.Date1Num < b.Date1Num
     WHERE
         (b.NameFull_Role IS NULL)
     ORDER BY RolesOrder , Date1Num , NameFull;
 
-DROP VIEW IF EXISTS V_MOSTRECENTROLE1;
-CREATE VIEW V_MOSTRECENTROLE1 AS
+DROP TABLE IF EXISTS TTX_MOSTRECENTROLE1;
+CREATE TABLE TTX_MOSTRECENTROLE1 AS
     SELECT *
-        FROM V_MOSTRECENTROLE0
+        FROM TTX_MOSTRECENTROLE0
         WHERE
-            (Club = 'Corporate Toastmasters')
-            AND (CurrentMember = 'Yes')
+            (Club = @Club)
+            AND (CurrentMember = @CurrentMember)
             AND (Qualification <> 'No qualification')
             AND (Role <> 'No role')
         GROUP BY NameFull , Role
         ORDER BY RolesOrder , Date1Num , NameFull;
 
-SELECT * FROM V_MOSTRECENTROLE0;
-SELECT * FROM V_MOSTRECENTROLE1;
+SELECT * FROM TTX_MOSTRECENTROLE0;
+SELECT * FROM TTX_MOSTRECENTROLE1;
 
 
 /*
 SECTION 2 OF 2: CREATE A CURRENT MEMBERS AND CONTESTABLE ROLES
 */
 
-DROP VIEW IF EXISTS V_CURRENTMEMBERS0;
-CREATE VIEW V_CURRENTMEMBERS0 AS
+-- ========================  TTX_CURRENTMEMBERS 0-1 ========================
+
+
+DROP TABLE IF EXISTS TTX_CURRENTMEMBERS0;
+CREATE TABLE TTX_CURRENTMEMBERS0 AS
     SELECT
         CONCAT(RECORDS_MEMBERS.namefirst , ' ' , RECORDS_MEMBERS.namelast) AS NameFull ,
         currentclubs ,
@@ -298,48 +324,51 @@ CREATE VIEW V_CURRENTMEMBERS0 AS
     FROM RECORDS_MEMBERS;
 -- SELECT * FROM V_CURRENTMEMBERS0 ORDER BY currentclubs , currentmember , NameFull;
 
-DROP VIEW IF EXISTS V_CURRENTMEMBERS1;
-CREATE VIEW V_CURRENTMEMBERS1 AS
+DROP TABLE IF EXISTS TTX_CURRENTMEMBERS1;
+CREATE TABLE TTX_CURRENTMEMBERS1 AS
     SELECT *
-    FROM V_CURRENTMEMBERS0
+    FROM TTX_CURRENTMEMBERS0
     WHERE
-        (currentclubs = 'Corporate Toastmasters')
-        AND (currentmember = 'Yes');
+        (currentclubs = @currentclubs)
+        AND (currentmember = @currentmember);
 -- SELECT * FROM V_CURRENTMEMBERS1 ORDER BY currentclubs , currentmember , NameFull;
 
-DROP VIEW IF EXISTS V_CONTESTABLE_TMIROLES0;
-CREATE VIEW V_CONTESTABLE_TMIROLES0 AS
+-- ========================  TTX_CONTESTABLE_TMIROLES 0 ========================
+
+DROP TABLE IF EXISTS TTX_CONTESTABLE_TMIROLES0;
+CREATE TABLE TTX_CONTESTABLE_TMIROLES0 AS
     SELECT Role
     FROM TMI_ROLES
     WHERE contestable = 'Yes';
 -- SELECT * FROM V_CONTESTABLE_TMIROLES;
 
+-- ========================  TTX_CONTESTABLE_TMIROLES_TO_MEMBERS 0-2 ========================
 
 -- CROSS JOIN MEMBERS & CONTESTABLE ROLES
-DROP VIEW IF EXISTS V_CONTESTABLE_TMIROLES_TO_MEMBERS0;
-CREATE VIEW V_CONTESTABLE_TMIROLES_TO_MEMBERS0 AS
+DROP TABLE IF EXISTS TTX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
+CREATE TABLE TTX_CONTESTABLE_TMIROLES_TO_MEMBERS0 AS
     SELECT *
-    FROM V_CONTESTABLE_TMIROLES0
-    CROSS JOIN V_CURRENTMEMBERS0;
+    FROM TTX_CONTESTABLE_TMIROLES0
+    CROSS JOIN TTX_CURRENTMEMBERS0;
 -- SELECT * FROM V_CONTESTABLE_TMIROLES_TO_MEMBERS0;
 
-DROP VIEW IF EXISTS V_CONTESTABLE_TMIROLES_TO_MEMBERS1;
-CREATE VIEW V_CONTESTABLE_TMIROLES_TO_MEMBERS1 AS
+DROP TABLE IF EXISTS TTX_CONTESTABLE_TMIROLES_TO_MEMBERS1;
+CREATE TABLE TTX_CONTESTABLE_TMIROLES_TO_MEMBERS1 AS
     SELECT
         * ,
         CONCAT(NameFull , ' - ' , Role) AS NameFull_Role
-    FROM V_CONTESTABLE_TMIROLES_TO_MEMBERS0;
+    FROM TTX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
 -- SELECT * FROM V_CONTESTABLE_TMIROLES_TO_MEMBERS1;
 
-DROP VIEW IF EXISTS V_CONTESTABLE_TMIROLES_TO_MEMBERS2;
-CREATE VIEW V_CONTESTABLE_TMIROLES_TO_MEMBERS2 AS
+DROP TABLE IF EXISTS TTX_CONTESTABLE_TMIROLES_TO_MEMBERS2;
+CREATE TABLE TTX_CONTESTABLE_TMIROLES_TO_MEMBERS2 AS
     SELECT *
-    FROM V_CONTESTABLE_TMIROLES_TO_MEMBERS1
+    FROM TTX_CONTESTABLE_TMIROLES_TO_MEMBERS1
     WHERE
-        (currentclubs = 'Corporate Toastmasters')
-        AND (currentmember = 'Yes');
-SELECT * FROM V_CONTESTABLE_TMIROLES_TO_MEMBERS1;
-SELECT * FROM V_CONTESTABLE_TMIROLES_TO_MEMBERS2;
+        (currentclubs = @currentclubs)
+        AND (currentmember = @currentmember);
+SELECT * FROM TTX_CONTESTABLE_TMIROLES_TO_MEMBERS1;
+SELECT * FROM TTX_CONTESTABLE_TMIROLES_TO_MEMBERS2;
 
 
 /*
