@@ -5,9 +5,22 @@
 SET @NameFull = 'Emma Armitage';
 
 -- SET UP VIEW
--- Creates a view of all most recent projects. Could refer directly to the underlying table.
-DROP VIEW IF EXISTS V_QUALIFICATION_STATUS0;
-CREATE VIEW V_QUALIFICATION_STATUS0 AS
+
+-- Shows what TMI international indicates if the current status of a member.
+DROP TABLE IF EXISTS TTX_TMIQUALIFICATIONS0;
+CREATE TABLE TTX_TMIQUALIFICATIONS0 AS
+  SELECT
+  	-- NameFull ,
+      Qualification ,
+      QualificationStatus
+  FROM TTX_QUALIFICATIONS0
+  WHERE NameFull = @NameFull
+  ORDER BY QualificationsOrder;
+SElECT * FROM TTX_TMIQUALIFICATIONS0;
+
+-- Creates a view of all most recent projects. Could refer directly to the underlying table. ALL MEMBERS, ALL QUALIFICATIONS.
+DROP TABLE IF EXISTS TTX_QUALIFICATION_STATUS0;
+CREATE TABLE TTX_QUALIFICATION_STATUS0 AS
   SELECT
       MembersID ,
       NameFull ,
@@ -25,14 +38,25 @@ CREATE VIEW V_QUALIFICATION_STATUS0 AS
       Role ,
       Date1 ,
       QualificationStatus
-  FROM V_MOSTRECENTPROJECT0
+  FROM TTX_MOSTRECENTPROJECT0
   -- WHERE
     -- (QualificationStatus = 'In progress' OR QualificationStatus = 'Completed')
     -- AND Qualification <> 'No qualification'
     -- AND Role <> 'No role'
   ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
-SELECT * FROM V_QUALIFICATION_STATUS0;
+SELECT * FROM TTX_QUALIFICATION_STATUS0;
 
+DROP TABLE IF EXISTS TTX_QUALIFICATION_STATUS1;
+CREATE TABLE TTX_QUALIFICATION_STATUS1 AS
+  SELECT *
+  FROM TTX_QUALIFICATION_STATUS0
+  WHERE
+    NameFull = @NameFull
+    AND (QualificationStatus = 'In progress' OR QualificationStatus = 'Completed')
+    AND Qualification <> 'No qualification'
+    AND Role <> 'No role'
+  ORDER BY QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
+SELECT * FROM TTX_QUALIFICATION_STATUS1;
 
 
 
@@ -44,7 +68,7 @@ SELECT * FROM V_QUALIFICATION_STATUS0;
 DROP TABLE IF EXISTS TTX_CC_PROJECT_STATUS0;
 CREATE TABLE TTX_CC_PROJECT_STATUS0 AS
   SELECT *
-  FROM V_QUALIFICATION_STATUS0
+  FROM TTX_QUALIFICATION_STATUS0
   WHERE
     NameFull = @NameFull
     AND QualificationsID = '1'
@@ -56,9 +80,9 @@ CREATE TABLE TTX_CC_PROJECT_STATUS0 AS
 DROP TABLE IF EXISTS TTX_CC_PROJECT_STATUS_PCENT0;
 CREATE TABLE TTX_CC_PROJECT_STATUS_PCENT0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATION_STATUS0 WHERE QualificationsID = '1' GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATION_STATUS0 WHERE QualificationsID = '1' GROUP BY Qualification) AS Qualification ,
-        (SELECT COUNT(*) FROM V_QUALIFICATION_STATUS0 WHERE NameFull = @NameFull AND QualificationsID = '1' AND QualificationStatus = 'In progress') / '10' AS Percentage;
+		(SELECT QualificationsID FROM TTX_QUALIFICATION_STATUS0 WHERE QualificationsID = '1' GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATION_STATUS0 WHERE QualificationsID = '1' GROUP BY Qualification) AS Qualification ,
+        (SELECT COUNT(*) FROM TTX_QUALIFICATION_STATUS0 WHERE NameFull = @NameFull AND QualificationsID = '1' AND QualificationStatus = 'In progress') / '10' AS Percentage;
 SELECT * FROM TTX_CC_PROJECT_STATUS_PCENT0;
 
 
@@ -73,16 +97,16 @@ SELECT * FROM TTX_CC_PROJECT_STATUS_PCENT0;
 DROP TABLE IF EXISTS TTX_ACB_CC_STATUS0;
 CREATE TABLE TTX_ACB_CC_STATUS0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
+		(SELECT QualificationsID FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
 SELECT * FROM TTX_ACB_CC_STATUS0;
 
 -- Creates a view of the current Advanced Communictor Bronze projects for each member.
 DROP TABLE IF EXISTS TTX_ACB_PROJECT_STATUS0;
 CREATE TABLE TTX_ACB_PROJECT_STATUS0 AS
 	SELECT *
-	FROM V_QUALIFICATION_STATUS0
+	FROM TTX_QUALIFICATION_STATUS0
 	WHERE
 		NameFull = @NameFull
 		AND QualificationsID = '2'
@@ -115,16 +139,16 @@ SELECT
 DROP TABLE IF EXISTS TTX_ACS_ACB_STATUS0;
 CREATE TABLE TTX_ACS_ACB_STATUS0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '2'  GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '2'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '2' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
+		(SELECT QualificationsID FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '2'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '2'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '2' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
 SELECT * FROM TTX_ACS_ACB_STATUS0;
 
 -- Creates a view of all Advanced Communicator Silver speeches
 DROP TABLE IF EXISTS TTX_ACS_PROJECT_STATUS0;
 CREATE TABLE TTX_ACS_PROJECT_STATUS0 AS
 	SELECT *
-	FROM V_QUALIFICATION_STATUS0
+	FROM TTX_QUALIFICATION_STATUS0
 	WHERE
 		NameFull = @NameFull
 		AND QualificationsID = '3'
@@ -168,16 +192,16 @@ SELECT
 DROP TABLE IF EXISTS TTX_ACG_ACS_STATUS0;
 CREATE TABLE TTX_ACG_ACS_STATUS0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '3'  GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '3'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '3' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
+		(SELECT QualificationsID FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '3'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '3'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '3' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
 SELECT * FROM TTX_ACG_ACS_STATUS0;
 
 -- Creates a view of all Advanced Communicator Gold speeches
 DROP TABLE IF EXISTS TTX_ACG_PROJECT_STATUS0;
 CREATE TABLE TTX_ACG_PROJECT_STATUS0 AS
 	SELECT *
-	FROM V_QUALIFICATION_STATUS0
+	FROM TTX_QUALIFICATION_STATUS0
 	WHERE
 		NameFull = @NameFull
 		AND QualificationsID = '4'
@@ -232,24 +256,24 @@ SELECT
 DROP TABLE IF EXISTS TTX_CL_STRUCTURE_MEMBERS0;
 CREATE TABLE TTX_CL_STRUCTURE_MEMBERS0 AS
 	SELECT
-    V_TMI_STRUCTURE0.QualificationsID AS QualificationsID ,
-    V_TMI_STRUCTURE0.QualificationsOrder AS QualificationsOrder ,
-    V_TMI_STRUCTURE0.Qualification AS Qualification,
-    SUBSTRING(V_TMI_STRUCTURE0.ProjectsOrder, 1, LOCATE ('.' , V_TMI_STRUCTURE0.ProjectsOrder)-1) AS ProjectsGroup ,
-    SUBSTRING(V_TMI_STRUCTURE0.Project, 1, LOCATE (':' , V_TMI_STRUCTURE0.Project)-1) AS ProjectGroup,
-    V_TMI_STRUCTURE0.ProjectsID AS ProjectsID ,
-    V_TMI_STRUCTURE0.ProjectsOrder AS ProjectsOrder ,
-    V_TMI_STRUCTURE0.Project AS Project ,
-    V_TMI_STRUCTURE0.RolesID AS RolesID ,
-    V_TMI_STRUCTURE0.RolesOrder AS RolesOrder ,
-    V_TMI_STRUCTURE0.Role AS Role,
+    TTX_TMI_STRUCTURE0.QualificationsID AS QualificationsID ,
+    TTX_TMI_STRUCTURE0.QualificationsOrder AS QualificationsOrder ,
+    TTX_TMI_STRUCTURE0.Qualification AS Qualification,
+    SUBSTRING(TTX_TMI_STRUCTURE0.ProjectsOrder, 1, LOCATE ('.' , TTX_TMI_STRUCTURE0.ProjectsOrder)-1) AS ProjectsGroup ,
+    SUBSTRING(TTX_TMI_STRUCTURE0.Project, 1, LOCATE (':' , TTX_TMI_STRUCTURE0.Project)-1) AS ProjectGroup,
+    TTX_TMI_STRUCTURE0.ProjectsID AS ProjectsID ,
+    TTX_TMI_STRUCTURE0.ProjectsOrder AS ProjectsOrder ,
+    TTX_TMI_STRUCTURE0.Project AS Project ,
+    TTX_TMI_STRUCTURE0.RolesID AS RolesID ,
+    TTX_TMI_STRUCTURE0.RolesOrder AS RolesOrder ,
+    TTX_TMI_STRUCTURE0.Role AS Role,
     RECORDS_MEMBERS.id AS MembersID,
     CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
-    CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , V_TMI_STRUCTURE0.ProjectsID) AS NameFull_ProjectsID
-	FROM V_TMI_STRUCTURE0
+    CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TTX_TMI_STRUCTURE0.ProjectsID) AS NameFull_ProjectsID
+	FROM TTX_TMI_STRUCTURE0
 	CROSS JOIN RECORDS_MEMBERS
 	WHERE
-		(V_TMI_STRUCTURE0.QualificationsID = '5')
+		(TTX_TMI_STRUCTURE0.QualificationsID = '5')
     AND (RECORDS_MEMBERS.currentmember = 'Yes');
 -- SELECT * FROM TTX_CL_STRUCTURE_MEMBERS0;
 
@@ -271,9 +295,9 @@ CREATE TABLE TTX_CL_STATUS0 AS
 		TTX_CL_STRUCTURE_MEMBERS0.MembersID ,
 		TTX_CL_STRUCTURE_MEMBERS0.NameFull ,
 		TTX_CL_STRUCTURE_MEMBERS0.NameFull_ProjectsID ,
-		V_MOSTRECENTPROJECT0.Date1
+		TTX_MOSTRECENTPROJECT0.Date1
 	FROM TTX_CL_STRUCTURE_MEMBERS0
-	LEFT JOIN V_MOSTRECENTPROJECT0 ON V_MOSTRECENTPROJECT0.NameFull_ProjectsID = TTX_CL_STRUCTURE_MEMBERS0.NameFull_ProjectsID
+	LEFT JOIN TTX_MOSTRECENTPROJECT0 ON TTX_MOSTRECENTPROJECT0.NameFull_ProjectsID = TTX_CL_STRUCTURE_MEMBERS0.NameFull_ProjectsID
 	ORDER BY membersID , QualificationsOrder , ProjectsOrder , RolesOrder;
 -- SELECT * FROM TTX_CL_STATUS0;
 
@@ -408,17 +432,17 @@ FROM TTX_CL_STATUS2;
 DROP TABLE IF EXISTS TTX_ALB_CC_STATUS0;
 CREATE TABLE TTX_ALB_CC_STATUS0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
+		(SELECT QualificationsID FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '1'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '1' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
 SELECT * FROM TTX_ALB_CC_STATUS0;
 
 DROP TABLE IF EXISTS TTX_ALB_CL_STATUS0;
 CREATE TABLE TTX_ALB_CL_STATUS0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '5'  GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '5'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '5' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
+		(SELECT QualificationsID FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '5'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '5'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '5' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
 SELECT * FROM TTX_ALB_CL_STATUS0;
 
 
@@ -426,7 +450,7 @@ SELECT * FROM TTX_ALB_CL_STATUS0;
 DROP TABLE IF EXISTS TTX_ALB_PROJECT_STATUS0;
 CREATE TABLE TTX_ALB_PROJECT_STATUS0 AS
 	SELECT *
-	FROM V_QUALIFICATION_STATUS0
+	FROM TTX_QUALIFICATION_STATUS0
 	WHERE
 		NameFull = @NameFull
 		AND QualificationsID = '6'
@@ -476,9 +500,9 @@ SELECT
 DROP TABLE IF EXISTS TTX_ALS_ALB_STATUS0;
 CREATE TABLE TTX_ALS_ALB_STATUS0 AS
 	SELECT
-		(SELECT QualificationsID FROM V_QUALIFICATIONS0 WHERE QualificationsID = '6'  GROUP BY QualificationsID) AS QualificationsID ,
-		(SELECT Qualification FROM V_QUALIFICATIONS0 WHERE QualificationsID = '6'  GROUP BY QualificationsID) AS Qualification ,
-		IF((SELECT COUNT(*) FROM V_QUALIFICATIONS0 WHERE QualificationsID = '6' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
+		(SELECT QualificationsID FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '6'  GROUP BY QualificationsID) AS QualificationsID ,
+		(SELECT Qualification FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '6'  GROUP BY QualificationsID) AS Qualification ,
+		IF((SELECT COUNT(*) FROM TTX_QUALIFICATIONS0 WHERE QualificationsID = '6' AND QualificationDate > '0' AND NameFull = @NameFull) >= '1', '1', '0' ) AS  ProjectComplete;
 SELECT * FROM TTX_ALS_ALB_STATUS0;
 
 
@@ -486,7 +510,7 @@ SELECT * FROM TTX_ALS_ALB_STATUS0;
 DROP TABLE IF EXISTS TTX_ALS_PROJECT_STATUS0;
 CREATE TABLE TTX_ALS_PROJECT_STATUS0 AS
 	SELECT *
-	FROM V_QUALIFICATION_STATUS0
+	FROM TTX_QUALIFICATION_STATUS0
 	WHERE
 		NameFull = @NameFull
 		AND QualificationsID = '7'
