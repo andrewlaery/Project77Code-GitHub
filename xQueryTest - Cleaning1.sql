@@ -4,7 +4,7 @@ SELECT * FROM RECORDS_PROJECTS
 
 DROP VIEW IF EXISTS V_PROJECT_RECORDS;
 CREATE VIEW V_PROJECT_RECORDS AS
-	SELECT 
+	SELECT
 			RECORDS_PROJECTS.membersID AS MembersID ,
             RECORDS_PROJECTS.qualificationsID AS QualificationsID ,
             RECORDS_PROJECTS.projectsID AS ProjectsID ,
@@ -28,11 +28,11 @@ CREATE VIEW V_PROJECT_RECORDS AS
 		LEFT JOIN TMI_PROJECTS ON TMI_PROJECTS.id = RECORDS_PROJECTS.projectsID
 		LEFT JOIN TMI_ROLES ON TMI_ROLES.id = RECORDS_PROJECTS.rolesID
 		LEFT JOIN TMI_MANUALS ON TMI_MANUALS.id = TMI_PROJECTS.manualsID
-		-- LEFT JOIN TMI_MANUAL_GROUPS ON TMI_MANUAL_GROUPS.id = TMI_MANUALS.manual_groupsID         
-       --  LEFT JOIN tmi_quals_manualgroups ON tmi_quals_manualgroups.manual_groupID = TMI_MANUAL_GROUPS.id 
+		-- LEFT JOIN TMI_MANUAL_GROUPS ON TMI_MANUAL_GROUPS.id = TMI_MANUALS.manual_groupsID
+       --  LEFT JOIN tmi_quals_manualgroups ON tmi_quals_manualgroups.manual_groupID = TMI_MANUAL_GROUPS.id
         LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID;
 SELECT * FROM V_PROJECT_RECORDS
-	WHERE 
+	WHERE
 		CurrentMember = 'Yes'
         AND Club = 'Daybreak Toastmasters'
         AND Qualification <> 'No qualification'
@@ -75,7 +75,7 @@ CREATE VIEW V_MEMBER_QUALIFICATIONS AS
 	LEFT JOIN records_members ON records_members.id = records_qualifications.membersID
 	LEFT JOIN tmi_qualifications ON tmi_qualifications.id = records_qualifications.qualificationsID;
 SELECT * FROM V_MEMBER_QUALIFICATIONS
-	WHERE 
+	WHERE
 		QualificationStatus <> 'Not started'
 		AND (namefirst = 'David'
 		OR namefirst = 'Donald'

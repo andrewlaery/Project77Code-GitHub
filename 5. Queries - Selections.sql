@@ -1,9 +1,9 @@
     /*
 1>> Create a new TABLE to hold forecast schedules including Date, Club, Role, Name.
-2>> Progressively create a VIEW query of the forecast TABLE for each role selector loop to see who has already been selected for a role at that meeting 
+2>> Progressively create a VIEW query of the forecast TABLE for each role selector loop to see who has already been selected for a role at that meeting
 and change their rank.
 3>> Create unavailability table
-3>> Create an availability table for each role (0 = unavailable, 0.5 = role priority, 1 = available, 1000 = role depriority). 
+3>> Create an availability table for each role (0 = unavailable, 0.5 = role priority, 1 = available, 1000 = role depriority).
 
 
 
@@ -25,11 +25,11 @@ CREATE TABLE TTX_FORECAST0 (id SERIAL , NameFull VARCHAR(255) , Role VARCHAR(255
 -- Create a member/role counter from the Forecast Table
 DROP VIEW IF EXISTS V_TTX_FORECAST_COUNT0;
 CREATE VIEW V_TTX_FORECAST_COUNT0 AS
-	SELECT 
+	SELECT
         NameFull ,
         COUNT(*)*100000000 AS RankAdder
     FROM TTX_FORECAST0
-    WHERE 
+    WHERE
         (ClubsID = '2')
         AND (meetingdate = '2017-07-12')
     GROUP BY NameFull;
@@ -38,12 +38,12 @@ CREATE VIEW V_TTX_FORECAST_COUNT0 AS
 -- Create a list of members who are unavailable
 DROP VIEW IF EXISTS V_RECORDS_MEMBER_UNAVAILABILITY0;
 CREATE VIEW V_RECORDS_MEMBER_UNAVAILABILITY0 AS
-	SELECT 
+	SELECT
 			CONCAT(RECORDS_MEMBERS.namefirst, ' ' , RECORDS_MEMBERS.namelast) AS NameFull
         FROM RECORDS_MEMBER_UNAVAILABILITY
 	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_MEMBER_UNAVAILABILITY.membersID
     WHERE
-		 (startdate <= '2017-07-12') 
+		 (startdate <= '2017-07-12')
 		 AND (enddate >= '2017-07-12');
 SELECT * FROM V_RECORDS_MEMBER_UNAVAILABILITY0;
 
@@ -51,7 +51,7 @@ SELECT * FROM V_RECORDS_MEMBER_UNAVAILABILITY0;
 DROP TABLE IF EXISTS TTX_TMI_ROLES_MEMBER_RANKED0;
 CREATE TABLE TTX_TMI_ROLES_MEMBER_RANKED0 (id SERIAL , NameFull VARCHAR(255) , Role VARCHAR(255) , Date1Num INT DEFAULT 1, RankAdder INT DEFAULT 1, Rank INT , MeetingDate DATE DEFAULT '2017-07.12' , ClubsID VARCHAR(255) DEFAULT '2');
 INSERT INTO TTX_TMI_ROLES_MEMBER_RANKED0 (NameFull , Role , Date1Num , RankAdder , Rank)
-    SELECT 
+    SELECT
         V_CONTESTABLE_TMIROLES_TO_MEMBERS2.NameFull,
         V_CONTESTABLE_TMIROLES_TO_MEMBERS2.Role ,
         IFNULL(CAST(V_MOSTRECENTROLE1.Date1 AS unsigned),1) ,
@@ -70,5 +70,5 @@ INSERT INTO TTX_FORECAST0 (NameFull , Role , clubsID , meetingdate)
         ORDER BY Rank , NameFull
         LIMIT 3;
 
-        
+
 SELECT * FROM TTX_FORECAST0;

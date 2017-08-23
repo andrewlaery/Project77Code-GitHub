@@ -375,7 +375,7 @@ SELECT * FROM TMI_ROLES ;
 
 /*==========================================================================================
 ADD FORGIEGN KEY"S TO TABLES
-=========================================================================================*/
+=========================================================================================*
 
 ALTER TABLE TMI_PROJECTS
 	ADD FOREIGN KEY ( manualsID ) REFERENCES TMI_MANUALS ( id ) ,
@@ -394,7 +394,7 @@ ALTER TABLE TMI_QUALS_MANUALGROUPS
    	ADD FOREIGN KEY ( qualificationID ) REFERENCES TMI_QUALIFICATIONS ( id ),
    	ADD FOREIGN KEY ( manual_groupID ) REFERENCES TMI_MANUAL_GROUPS ( id );
 
-/*==========================================================================================
+==========================================================================================
 SELECT STATEMENT CONNECTING ALL TABLES
 =========================================================================================*/
 

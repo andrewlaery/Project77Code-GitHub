@@ -2,7 +2,7 @@ SELECT * FROM V_MOSTRECENTPROJECT1;
 
 DROP VIEW IF EXISTS V_STATUS_CC0;
 CREATE VIEW V_STATUS_CC0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
@@ -14,7 +14,7 @@ SELECT * FROM V_STATUS_CC0;
 
 DROP VIEW IF EXISTS V_STATUS_ACB0;
 CREATE VIEW V_STATUS_ACB0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
@@ -26,7 +26,7 @@ SELECT * FROM V_STATUS_ACB0;
 
 DROP VIEW IF EXISTS V_STATUS_ACS0;
 CREATE VIEW V_STATUS_ACS0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
@@ -38,7 +38,7 @@ SELECT * FROM V_STATUS_ACS0;
 
 DROP VIEW IF EXISTS V_STATUS_ACG0;
 CREATE VIEW V_STATUS_ACG0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
@@ -50,7 +50,7 @@ SELECT * FROM V_STATUS_ACG0;
 
 DROP VIEW IF EXISTS V_STATUS_CL0;
 CREATE VIEW V_STATUS_CL0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
@@ -62,7 +62,7 @@ SELECT * FROM V_STATUS_CL0;
 
 DROP VIEW IF EXISTS V_STATUS_ALB0;
 CREATE VIEW V_STATUS_ALB0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
@@ -74,7 +74,7 @@ SELECT * FROM V_STATUS_ALB0;
 
 DROP VIEW IF EXISTS V_STATUS_ALS0;
 CREATE VIEW V_STATUS_ALS0 AS
-	SELECT 
+	SELECT
 			Qualification ,
             NameFull ,
 			COUNT(*) AS NumOfCompletedProjects
