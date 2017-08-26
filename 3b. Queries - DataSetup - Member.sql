@@ -16,7 +16,7 @@ DROP TEMPORARY TABLE IF EXISTS TTX_CURRENTMEMBERS1;
 CREATE TEMPORARY TABLE TTX_CURRENTMEMBERS1 AS
     SELECT
 			NameFull
-    FROM TTX_CURRENTMEMBERS0
+    FROM TTX_ALLMEMBERS0
     WHERE
         (currentclubs = @currentclubs)
         AND (currentmember = @currentmember)

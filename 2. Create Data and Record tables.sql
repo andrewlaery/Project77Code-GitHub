@@ -291,7 +291,7 @@ SELECT * FROM RECORDS_MEMBERS ;
 
 
 DROP TABLE IF EXISTS RECORDS_MEMBER_UNAVAILABILITY ;
-CREATE TABLE RECORDS_MEMBER_UNAVAILABILITY ( id Serial , membersID bigint(40) unsigned , rolesID bigint(40) unsigned , startdate DATE , enddate DATE , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+CREATE TABLE RECORDS_MEMBER_UNAVAILABILITY ( id Serial , membersID bigint(40) unsigned , rolesID bigint(40) unsigned , startdate DATE , enddate DATE , notes VARCHAR(255) , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
 INSERT INTO RECORDS_MEMBER_UNAVAILABILITY ( membersID , rolesID , startdate , enddate , createdby ) VALUES ( '23'  , '41' , '2017-07-12' , '2017-07-26' , 'bulk' );
 INSERT INTO RECORDS_MEMBER_UNAVAILABILITY ( membersID , rolesID , startdate , enddate , createdby ) VALUES ( '41'  , '41' , '2017-07-26' , '2017-08-23' , 'bulk' );
 INSERT INTO RECORDS_MEMBER_UNAVAILABILITY ( membersID , rolesID , startdate , enddate , createdby ) VALUES ( '41'  , '41' , '2017-09-27' , '2017-09-27' , 'bulk' );
