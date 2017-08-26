@@ -1,11 +1,12 @@
 
 -- SET PARAMETERS
 
-SET @Club = 'Corporate Toastmasters';
-SET @currentclubs = 'Corporate Toastmasters';
+SET @Club = 'Daybreak Toastmasters';
+SET @currentclubs = 'Daybreak Toastmasters';
 SET @QualificationStatus1 = 'In progress';
 SET @QualificationStatus2 = 'Completed';
 SET @CurrentMember = 'Yes';
+SET @NameFull = 'Donald Jessep';
 
 
 -- ========================  CURRENT MEMBERS ========================
@@ -18,7 +19,8 @@ CREATE TEMPORARY TABLE TTX_CURRENTMEMBERS1 AS
     FROM TTX_CURRENTMEMBERS0
     WHERE
         (currentclubs = @currentclubs)
-        AND (currentmember = @currentmember);
+        AND (currentmember = @currentmember)
+        AND (NameFull = @Namefull);
 SELECT * FROM TTX_CURRENTMEMBERS1 ORDER BY NameFull;
 
 
@@ -37,6 +39,7 @@ CREATE TEMPORARY TABLE TTX_QUALIFICATIONS1 AS
         (Club = @Club)
         AND (CurrentMember = @CurrentMember)
         AND ((QualificationStatus = @QualificationStatus1) OR (QualificationStatus = @QualificationStatus2))
+        AND (NameFull = @Namefull)
 		ORDER BY NameFull , QualificationsOrder;
 SELECT * FROM TTX_QUALIFICATIONS1;
 
@@ -63,6 +66,7 @@ CREATE TEMPORARY TABLE TTX_RECORDS_PROJECTS1 AS
         AND (CurrentMember = @CurrentMember)
         AND (Qualification <> 'No qualification')
         AND (Role <> 'No role')
+        AND (NameFull = @Namefull)
     ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
 SELECT * FROM TTX_RECORDS_PROJECTS1;
 
@@ -87,6 +91,7 @@ CREATE TEMPORARY TABLE TTX_MOSTRECENTPROJECT1 AS
           AND (CurrentMember = @CurrentMember)
           AND (Qualification <> 'No qualification')
           AND (Role <> 'No role')
+          AND (NameFull = @Namefull)
       ORDER BY NameFull , QualificationsOrder , ManualsOrder , ProjectsOrder , Date1Num;
 SELECT * FROM TTX_MOSTRECENTPROJECT1;
 
@@ -105,5 +110,6 @@ CREATE TEMPORARY TABLE TTX_MOSTRECENTROLE1 AS
             AND (CurrentMember = @CurrentMember)
             AND (Qualification <> 'No qualification')
             AND (Role <> 'No role')
+            AND (NameFull = @Namefull)
         ORDER BY NameFull , RolesOrder , Date1Num;
 SELECT * FROM TTX_MOSTRECENTROLE1;
