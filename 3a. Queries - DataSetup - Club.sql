@@ -14,7 +14,8 @@ SET @CurrentMember = 'Yes';
 DROP TEMPORARY TABLE IF EXISTS TTX_CURRENTMEMBERS1;
 CREATE TEMPORARY TABLE TTX_CURRENTMEMBERS1 AS
     SELECT
-			NameFull
+			currentclubs AS CurrentClub ,
+            NameFull
     FROM TTX_ALLMEMBERS0
     WHERE
         (currentclubs = @currentclubs)
@@ -28,7 +29,8 @@ SELECT * FROM TTX_CURRENTMEMBERS1 ORDER BY NameFull;
 DROP TEMPORARY TABLE IF EXISTS TTX_QUALIFICATIONS1;
 CREATE TEMPORARY TABLE TTX_QUALIFICATIONS1 AS
     SELECT
-			NameFull ,
+			Club ,
+            NameFull ,
 			Track ,
 			QualificationShort ,
 			QualificationStatus
@@ -49,7 +51,8 @@ DROP TEMPORARY TABLE IF EXISTS TTX_RECORDS_PROJECTS1;
 CREATE TEMPORARY TABLE TTX_RECORDS_PROJECTS1 AS
 	SELECT
 			RP_ID ,
-			NameFull ,
+			Club ,
+            NameFull ,
 			Track ,
 			QualificationShort ,
 			ManualGroup ,
@@ -73,7 +76,8 @@ SELECT * FROM TTX_RECORDS_PROJECTS1;
 DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTPROJECT1;
 CREATE TEMPORARY TABLE TTX_MOSTRECENTPROJECT1 AS
     SELECT
-				NameFull ,
+				Club ,
+                NameFull ,
 				Track ,
 				QualificationShort ,
 				ManualGroup ,
@@ -96,7 +100,8 @@ SELECT * FROM TTX_MOSTRECENTPROJECT1;
 DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTROLE1;
 CREATE TEMPORARY TABLE TTX_MOSTRECENTROLE1 AS
     SELECT
-					NameFull ,
+					Club ,
+          NameFull ,
 					Role ,
 					Date1
         FROM TTX_MOSTRECENTROLE0

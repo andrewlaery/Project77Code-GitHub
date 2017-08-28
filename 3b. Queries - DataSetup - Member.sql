@@ -9,21 +9,6 @@ SET @CurrentMember = 'Yes';
 SET @NameFull = 'Donald Jessep';
 
 
--- ========================  CURRENT MEMBERS ========================
-
--- List of current memebers
-DROP TEMPORARY TABLE IF EXISTS TTX_CURRENTMEMBERS1;
-CREATE TEMPORARY TABLE TTX_CURRENTMEMBERS1 AS
-    SELECT
-			NameFull
-    FROM TTX_ALLMEMBERS0
-    WHERE
-        (currentclubs = @currentclubs)
-        AND (currentmember = @currentmember)
-        AND (NameFull = @Namefull);
-SELECT * FROM TTX_CURRENTMEMBERS1 ORDER BY NameFull;
-
-
 -- ========================  TTX_QUALIFICATIONS ========================
 
 -- List of current members TMI Qualifications:

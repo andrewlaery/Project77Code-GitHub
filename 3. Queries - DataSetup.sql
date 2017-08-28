@@ -413,11 +413,13 @@ SECTION 2 OF 2: CREATE A CURRENT MEMBERS AND CONTESTABLE ROLES
 DROP TEMPORARY TABLE IF EXISTS TTX_ALLMEMBERS0;
 CREATE TEMPORARY TABLE TTX_ALLMEMBERS0 AS
     SELECT
-        CONCAT(RECORDS_MEMBERS.namefirst , ' ' , RECORDS_MEMBERS.namelast) AS NameFull ,
+				id AS MembersID ,
+				CONCAT(RECORDS_MEMBERS.namefirst , ' ' , RECORDS_MEMBERS.namelast) AS NameFull ,
         currentclubs ,
         currentmember
     FROM RECORDS_MEMBERS;
 SELECT * FROM TTX_ALLMEMBERS0 ORDER BY currentclubs , currentmember , NameFull;
+SELECT * FROM TTX_ALLMEMBERS0;
 
 -- ========================  TTX_RECORDS_MEMBER_UNAVAILABILITY 0 ========================
 
