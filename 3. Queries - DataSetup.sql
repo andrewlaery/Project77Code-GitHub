@@ -3,29 +3,72 @@
 -- ========================  TTX_TMI_STRUCTURE 0 ========================
 
 -- Combination of the TMI Data Tables to show the TMI Structure
-DROP TEMPORARY TABLE IF EXISTS TTX_TMI_STRUCTURE0;
-CREATE TEMPORARY TABLE TTX_TMI_STRUCTURE0 AS
+DROP TABLE IF EXISTS TX_TMI_STRUCTURE0;
+CREATE TABLE TX_TMI_STRUCTURE0
+	(id Serial ,
+    TracksID bigint(40) unsigned ,
+    TracksOrder INT ,
+    Track VARCHAR(255) ,
+    QualificationsID bigint(40) unsigned ,
+    QualificationsOrder INT ,
+    Qualification VARCHAR(255) ,
+    QualificationShort VARCHAR(255) ,
+    ManualGroupsID bigint(40) unsigned ,
+    ManualGroupsOrder INT ,
+    ManualGroup VARCHAR(255) ,
+    ManualsID bigint(40) unsigned ,
+    ManualsOrder INT ,
+    Manual VARCHAR(255) ,
+    ProjectsID bigint(40) unsigned ,
+    ProjectsOrder INT ,
+    Project VARCHAR(255) ,
+    RolesID bigint(40) unsigned ,
+    RolesOrder INT ,
+    Role VARCHAR(255) ,
+    QualificationProject VARCHAR(255));
+
+INSERT INTO TX_TMI_STRUCTURE0
+		(TracksID ,
+		TracksOrder ,
+		Track ,
+		QualificationsID , 
+		QualificationsOrder ,
+		Qualification ,
+		QualificationShort ,
+		ManualGroupsID ,
+		ManualGroupsOrder ,
+		ManualGroup ,
+		ManualsID ,
+		ManualsOrder ,
+		Manual ,
+		ProjectsID ,
+		ProjectsOrder ,
+		Project ,
+		RolesID ,
+		RolesOrder ,
+		Role ,
+		QualificationProject)
 	SELECT
-		TMI_TRACKS.id AS TracksID ,
-		TMI_TRACKS.tmiorder AS TracksOrder ,
-		TMI_TRACKS.track AS Track ,
-		TMI_QUALIFICATIONS.id AS QualificationsID ,
-		TMI_QUALIFICATIONS.tmiorder AS QualificationsOrder ,
-		TMI_QUALIFICATIONS.qualification AS Qualification ,
-		TMI_QUALIFICATIONS.qualificationshort AS QualificationShort ,
-		TMI_MANUAL_GROUPS.id AS ManualGroupsID ,
-		TMI_MANUAL_GROUPS.tmiorder AS ManualGroupsOrder ,
-		TMI_MANUAL_GROUPS.manual_group AS ManualGroup ,
-		TMI_MANUALS.id AS ManualsID ,
-		TMI_MANUALS.tmiorder AS ManualsOrder ,
-		TMI_MANUALS.manual AS Manual ,
-		TMI_PROJECTS.id AS ProjectsID ,
-		TMI_PROJECTS.tmiorder AS ProjectsOrder ,
-		TMI_PROJECTS.project AS Project ,
-		TMI_ROLES.id AS RolesID ,
-		TMI_ROLES.tmiorder AS RolesOrder ,
-		TMI_ROLES.role AS Role ,
-		CONCAT(TMI_QUALIFICATIONS.id , '-', TMI_PROJECTS.id) AS QualficationProject
+		TMI_TRACKS.id ,
+		TMI_TRACKS.tmiorder ,
+		TMI_TRACKS.track ,
+		TMI_QUALIFICATIONS.id ,
+		TMI_QUALIFICATIONS.tmiorder ,
+		TMI_QUALIFICATIONS.qualification ,
+		TMI_QUALIFICATIONS.qualificationshort ,
+		TMI_MANUAL_GROUPS.id ,
+		TMI_MANUAL_GROUPS.tmiorder ,
+		TMI_MANUAL_GROUPS.manual_group ,
+		TMI_MANUALS.id ,
+		TMI_MANUALS.tmiorder ,
+		TMI_MANUALS.manual ,
+		TMI_PROJECTS.id ,
+		TMI_PROJECTS.tmiorder ,
+		TMI_PROJECTS.project ,
+		TMI_ROLES.id ,
+		TMI_ROLES.tmiorder ,
+		TMI_ROLES.role ,
+		CONCAT(TMI_QUALIFICATIONS.id , '-', TMI_PROJECTS.id)
 	FROM TMI_PROJECTS
 	LEFT JOIN TMI_ROLES ON TMI_ROLES.id = TMI_PROJECTS.rolesID
 	LEFT JOIN TMI_MANUALS ON  TMI_MANUALS.id = TMI_PROJECTS.manualsID
@@ -33,7 +76,7 @@ CREATE TEMPORARY TABLE TTX_TMI_STRUCTURE0 AS
 	LEFT JOIN TMI_QUALS_MANUALGROUPS ON TMI_QUALS_MANUALGROUPS.manual_groupID = TMI_MANUAL_GROUPS.id
 	LEFT JOIN TMI_QUALIFICATIONS ON TMI_QUALIFICATIONS.id = TMI_QUALS_MANUALGROUPS.qualificationID
 	LEFT JOIN TMI_TRACKS ON TMI_TRACKS.id = TMI_QUALIFICATIONS.tracksID;
-SELECT * FROM TTX_TMI_STRUCTURE0;
+SELECT * FROM TX_TMI_STRUCTURE0;
 
 /*
 SECTION 1 OF 2: CURRENT MEMBERS, THEIR QUALIFICATIONS AND PROJECTS
