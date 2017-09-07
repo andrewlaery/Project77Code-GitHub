@@ -1,53 +1,57 @@
 
 
--- ========================  TTX_TMI_STRUCTURE 0 ========================
+-- ========================  TMI STRUCTURE  ========================
 
 -- Combination of the TMI Data Tables to show the TMI Structure
 DROP TABLE IF EXISTS TX_TMI_STRUCTURE0;
 CREATE TABLE TX_TMI_STRUCTURE0
-	(id Serial ,
-    TracksID bigint(40) unsigned ,
-    TracksOrder INT ,
-    Track VARCHAR(255) ,
-    QualificationsID bigint(40) unsigned ,
-    QualificationsOrder INT ,
-    Qualification VARCHAR(255) ,
-    QualificationShort VARCHAR(255) ,
-    ManualGroupsID bigint(40) unsigned ,
-    ManualGroupsOrder INT ,
-    ManualGroup VARCHAR(255) ,
-    ManualsID bigint(40) unsigned ,
-    ManualsOrder INT ,
-    Manual VARCHAR(255) ,
-    ProjectsID bigint(40) unsigned ,
-    ProjectsOrder INT ,
-    Project VARCHAR(255) ,
-    RolesID bigint(40) unsigned ,
-    RolesOrder INT ,
-    Role VARCHAR(255) ,
-    QualificationProject VARCHAR(255));
+	(
+		id Serial ,
+		TracksID bigint(40) unsigned ,
+		TracksOrder INT ,
+		Track VARCHAR(255) ,
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsOrder INT ,
+		ManualGroup VARCHAR(255) ,
+		ManualsID bigint(40) unsigned ,
+		ManualsOrder INT ,
+		Manual VARCHAR(255) ,
+		ProjectsID bigint(40) unsigned ,
+		ProjectsOrder INT ,
+		Project VARCHAR(255) ,
+		RolesID bigint(40) unsigned ,
+		RolesOrder INT ,
+		Role VARCHAR(255) ,
+		QualificationProject VARCHAR(255)
+	);
 
 INSERT INTO TX_TMI_STRUCTURE0
-		(TracksID ,
-		TracksOrder ,
-		Track ,
-		QualificationsID , 
-		QualificationsOrder ,
-		Qualification ,
-		QualificationShort ,
-		ManualGroupsID ,
-		ManualGroupsOrder ,
-		ManualGroup ,
-		ManualsID ,
-		ManualsOrder ,
-		Manual ,
-		ProjectsID ,
-		ProjectsOrder ,
-		Project ,
-		RolesID ,
-		RolesOrder ,
-		Role ,
-		QualificationProject)
+		(
+			TracksID ,
+			TracksOrder ,
+			Track ,
+			QualificationsID ,
+			QualificationsOrder ,
+			Qualification ,
+			QualificationShort ,
+			ManualGroupsID ,
+			ManualGroupsOrder ,
+			ManualGroup ,
+			ManualsID ,
+			ManualsOrder ,
+			Manual ,
+			ProjectsID ,
+			ProjectsOrder ,
+			Project ,
+			RolesID ,
+			RolesOrder ,
+			Role ,
+			QualificationProject
+		)
 	SELECT
 		TMI_TRACKS.id ,
 		TMI_TRACKS.tmiorder ,
@@ -82,11 +86,50 @@ SELECT * FROM TX_TMI_STRUCTURE0;
 SECTION 1 OF 2: CURRENT MEMBERS, THEIR QUALIFICATIONS AND PROJECTS
 */
 
--- ========================  TTX_QUALIFICATIONS ========================
+-- ========================  QUALIFICATIONS ========================
 
 -- Lists members qualifications: ALL
-DROP TEMPORARY TABLE IF EXISTS TTX_QUALIFICATIONS0;
-CREATE TEMPORARY TABLE TTX_QUALIFICATIONS0 AS
+
+DROP TABLE IF EXISTS TX_QUALIFICATIONS0;
+CREATE TABLE TX_QUALIFICATIONS0
+	(
+		id SERIAL ,
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+		TracksID bigint(40) unsigned ,
+		TracksOrder INT ,
+		Track VARCHAR(255) ,
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+		QualificationDate DATE ,
+		QualificationStatus VARCHAR(255),
+		Club VARCHAR(255) ,
+		CurrentMember VARCHAR(255) ,
+		NameFull_QualificationsID VARCHAR(255) ,
+		NameFull_Qualification VARCHAR(255)
+	);
+
+
+INSERT INTO TX_QUALIFICATIONS0
+		(
+			MembersID ,
+			NameFull ,
+			TracksID ,
+			TracksOrder ,
+			Track ,
+			QualificationsID ,
+			QualificationsOrder ,
+			Qualification ,
+			QualificationShort ,
+			QualificationDate ,
+			QualificationStatus ,
+			Club ,
+			CurrentMember ,
+			NameFull_QualificationsID ,
+			NameFull_Qualification
+		)
 	SELECT
 		RECORDS_QUALIFICATIONS.membersID AS MembersID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
@@ -108,366 +151,730 @@ CREATE TEMPORARY TABLE TTX_QUALIFICATIONS0 AS
 	LEFT JOIN TMI_QUALIFICATIONS ON TMI_QUALIFICATIONS.id = RECORDS_QUALIFICATIONS.qualificationsID
 	LEFT JOIN TMI_TRACKS ON TMI_TRACKS.id = TMI_QUALIFICATIONS.tracksID
 	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID;
-SELECT * FROM TTX_QUALIFICATIONS0;
+SELECT * FROM TX_QUALIFICATIONS0;
 
--- ========================  TTX_RECORDS_PROJECTS 0 ========================
+-- ========================  RECORDS_PROJECTS ========================
 
+DROP TABLE IF EXISTS TX_RECORDS_PROJECTS0;
+CREATE TABLE TX_RECORDS_PROJECTS0
+	(
+		id SERIAL ,
 
-DROP TEMPORARY TABLE IF EXISTS TTX_RECORDS_PROJECTS0;
-CREATE TEMPORARY TABLE TTX_RECORDS_PROJECTS0 AS
+		RP_ID bigint(40) unsigned ,
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+
+		TracksID bigint(40) unsigned ,
+		TracksOrder INT ,
+		Track VARCHAR(255) ,
+
+		RP_QualificationsID bigint(40) unsigned ,
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+
+		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsOrder INT ,
+		ManualGroup VARCHAR(255) ,
+
+		ManualsID bigint(40) unsigned ,
+		ManualsOrder INT ,
+		Manual VARCHAR(255) ,
+
+		RP_ProjectsID bigint(40) unsigned ,
+		ProjectsID bigint(40) unsigned ,
+		ProjectsOrder INT ,
+		Project VARCHAR(255) ,
+
+		RP_RolesID bigint(40) unsigned ,
+		RolesID bigint(40) unsigned ,
+		RolesOrder INT ,
+		Role VARCHAR(255) ,
+
+		QualificationStatus VARCHAR(255) ,
+		Date1 DATE,
+		Date1Num INT,
+		Status1 VARCHAR(255) ,
+		CurrentMember VARCHAR(255) ,
+		Club VARCHAR(255) ,
+
+		NameFull_QualificationsID VARCHAR(255) ,
+		NameFull_Qualification VARCHAR(255) ,
+		NameFull_ProjectsID VARCHAR(255) ,
+		NameFull_Project VARCHAR(255) ,
+		NameFull_RolesID VARCHAR(255) ,
+		NameFull_Role VARCHAR(255)
+	);
+
+INSERT INTO TX_RECORDS_PROJECTS0
+	(
+			RP_ID ,
+			MembersID ,
+			NameFull ,
+
+			TracksID ,
+			TracksOrder ,
+			Track ,
+
+			RP_QualificationsID,
+			QualificationsID ,
+			QualificationsOrder ,
+			Qualification ,
+			QualificationShort ,
+
+			ManualGroupsID ,
+			ManualGroupsOrder ,
+			ManualGroup ,
+
+			ManualsID ,
+			ManualsOrder ,
+			Manual ,
+
+			RP_ProjectsID ,
+			ProjectsID ,
+			ProjectsOrder ,
+			Project ,
+
+			RP_RolesID,
+			RolesID ,
+			RolesOrder ,
+			Role ,
+
+			QualificationStatus ,
+			Date1 ,
+			Date1Num ,
+			Status1 ,
+			CurrentMember ,
+			Club ,
+
+			NameFull_QualificationsID ,
+			NameFull_Qualification ,
+			NameFull_ProjectsID ,
+			NameFull_Project ,
+			NameFull_RolesID ,
+			NameFull_Role
+	)
 	SELECT
-		RECORDS_PROJECTS.id AS RP_ID ,
+		RECORDS_PROJECTS.id ,
 		RECORDS_PROJECTS.membersID,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) ,
 
-		TTX_TMI_STRUCTURE0.tracksID AS TracksID ,
-		TTX_TMI_STRUCTURE0.tracksorder AS TracksOrder ,
-		TTX_TMI_STRUCTURE0.track AS Track ,
+		TX_TMI_STRUCTURE0.tracksID ,
+		TX_TMI_STRUCTURE0.tracksorder ,
+		TX_TMI_STRUCTURE0.track ,
 
-		RECORDS_PROJECTS.qualificationsID AS RP_QualificationsID,
-		TTX_TMI_STRUCTURE0.qualificationsID AS QualificationsID ,
-		TTX_TMI_STRUCTURE0.qualificationsorder AS QualificationsOrder ,
-		TTX_TMI_STRUCTURE0.qualification AS Qualification ,
-		TTX_TMI_STRUCTURE0.QualificationShort AS QualificationShort ,
+		RECORDS_PROJECTS.qualificationsID,
+		TX_TMI_STRUCTURE0.qualificationsID ,
+		TX_TMI_STRUCTURE0.qualificationsorder ,
+		TX_TMI_STRUCTURE0.qualification ,
+		TX_TMI_STRUCTURE0.QualificationShort ,
 
-		TTX_TMI_STRUCTURE0.ManualGroupsID AS ManualGroupsID ,
-		TTX_TMI_STRUCTURE0.ManualGroupsOrder AS ManualGroupsOrder ,
-		TTX_TMI_STRUCTURE0.ManualGroup AS ManualGroup ,
+		TX_TMI_STRUCTURE0.ManualGroupsID ,
+		TX_TMI_STRUCTURE0.ManualGroupsOrder ,
+		TX_TMI_STRUCTURE0.ManualGroup ,
 
-		TTX_TMI_STRUCTURE0.ManualsID AS ManualsID ,
-		TTX_TMI_STRUCTURE0.ManualsOrder AS ManualsOrder ,
-		TTX_TMI_STRUCTURE0.Manual AS Manual ,
+		TX_TMI_STRUCTURE0.ManualsID ,
+		TX_TMI_STRUCTURE0.ManualsOrder ,
+		TX_TMI_STRUCTURE0.Manual ,
 
-		RECORDS_PROJECTS.projectsID AS RP_ProjectsID ,
-		TTX_TMI_STRUCTURE0.ProjectsID AS ProjectsID ,
-		TTX_TMI_STRUCTURE0.ProjectsOrder AS ProjectsOrder ,
-		TTX_TMI_STRUCTURE0.Project AS Project ,
+		RECORDS_PROJECTS.projectsID ,
+		TX_TMI_STRUCTURE0.ProjectsID ,
+		TX_TMI_STRUCTURE0.ProjectsOrder ,
+		TX_TMI_STRUCTURE0.Project ,
 
-		RECORDS_PROJECTS.rolesID AS RP_RolesID,
-		TTX_TMI_STRUCTURE0.RolesID AS RolesID ,
-		TTX_TMI_STRUCTURE0.RolesOrder AS RolesOrder ,
-		TTX_TMI_STRUCTURE0.Role AS Role ,
+		RECORDS_PROJECTS.rolesID ,
+		TX_TMI_STRUCTURE0.RolesID ,
+		TX_TMI_STRUCTURE0.RolesOrder ,
+		TX_TMI_STRUCTURE0.Role ,
 
-		TTX_QUALIFICATIONS0.qualificationstatus AS QualificationStatus ,
-		RECORDS_PROJECTS.projectdate AS Date1 ,
-		CAST(RECORDS_PROJECTS.projectdate AS unsigned) AS Date1Num ,
-		RECORDS_PROJECTS.itemstatus AS Status1 ,
-		RECORDS_MEMBERS.currentmember AS CurrentMember ,
-		RECORDS_CLUBS.name AS Club ,
+		TX_QUALIFICATIONS0.qualificationstatus ,
+		RECORDS_PROJECTS.projectdate ,
+		CAST(RECORDS_PROJECTS.projectdate AS unsigned) ,
+		RECORDS_PROJECTS.itemstatus ,
+		RECORDS_MEMBERS.currentmember ,
+		RECORDS_CLUBS.name ,
 
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TTX_TMI_STRUCTURE0.qualificationsID) AS NameFull_QualificationsID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TTX_TMI_STRUCTURE0.qualification) AS NameFull_Qualification ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TTX_TMI_STRUCTURE0.projectsID) AS NameFull_ProjectsID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TTX_TMI_STRUCTURE0.project) AS NameFull_Project ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TTX_TMI_STRUCTURE0.rolesID) AS NameFull_RolesID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TTX_TMI_STRUCTURE0.role) AS NameFull_Role
-
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.qualificationsID) ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.qualification) ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.projectsID) ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.project) ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.rolesID) ,
+		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.role)
 	FROM RECORDS_PROJECTS
 	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_PROJECTS.membersID
-	LEFT JOIN TTX_TMI_STRUCTURE0 ON TTX_TMI_STRUCTURE0.QualficationProject = CONCAT(RECORDS_PROJECTS.qualificationsID , '-' , RECORDS_PROJECTS.projectsID)
+	LEFT JOIN TX_TMI_STRUCTURE0 ON TX_TMI_STRUCTURE0.QualificationProject = CONCAT(RECORDS_PROJECTS.qualificationsID , '-' , RECORDS_PROJECTS.projectsID)
 	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID
-	LEFT JOIN TTX_QUALIFICATIONS0 ON TTX_QUALIFICATIONS0.NameFull_QualificationsID = CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TTX_TMI_STRUCTURE0.qualificationsID);
-SELECT * FROM TTX_RECORDS_PROJECTS0;
+	LEFT JOIN TX_QUALIFICATIONS0 ON TX_QUALIFICATIONS0.NameFull_QualificationsID = CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TX_TMI_STRUCTURE0.qualificationsID);
+SELECT * FROM TX_RECORDS_PROJECTS0;
 
-/*
--- Lists projects including duplicates: ALL MEMBERS
-DROP TEMPORARY TABLE IF EXISTS TTX_RECORDS_PROJECTS0;
-CREATE TEMPORARY TABLE TTX_RECORDS_PROJECTS0 AS
-	SELECT
-		RECORDS_PROJECTS.id AS RP_ID ,
-		RECORDS_PROJECTS.membersID AS MembersID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
-
-		TMI_TRACKS.id AS TracksID ,
-		TMI_TRACKS.tmiorder AS TracksOrder ,
-		TMI_TRACKS.track AS Track ,
-
-		RECORDS_PROJECTS.qualificationsID AS RP_QualificationsID ,
-		TMI_QUALIFICATIONS.id AS QualificationsID ,
-		TMI_QUALIFICATIONS.tmiorder AS QualificationsOrder ,
-		TMI_QUALIFICATIONS.qualification AS Qualification ,
-
-		TMI_MANUAL_GROUPS.id AS ManualGroupsID ,
-		TMI_MANUAL_GROUPS.tmiorder AS ManualGroupsOrder ,
-		TMI_MANUAL_GROUPS.manual_group AS ManualGroup ,
-
-		TMI_MANUALS.id AS ManualsID ,
-		TMI_MANUALS.tmiorder AS ManualsOrder ,
-		TMI_MANUALS.manual AS Manual ,
-
-		RECORDS_PROJECTS.projectsID AS RP_ProjectsID ,
-		TMI_PROJECTS.id AS ProjectsID ,
-		TMI_PROJECTS.tmiorder AS ProjectOrder ,
-		TMI_PROJECTS.project AS Project ,
-
-		RECORDS_PROJECTS.rolesID AS RP_RolesID,
-		TMI_ROLES.id AS RolesID ,
-		TMI_ROLES.tmiorder AS RolesOrder ,
-		TMI_ROLES.role AS Role ,
-
-		RECORDS_PROJECTS.projectdate AS Date1 ,
-		RECORDS_PROJECTS.itemstatus AS Status1 ,
-		RECORDS_MEMBERS.currentmember AS CurrentMember ,
-		RECORDS_CLUBS.name AS Club ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_QUALIFICATIONS.id) AS NameFull_QualificationsID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_QUALIFICATIONS.qualification) AS NameFull_Qualification ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_PROJECTS.id) AS NameFull_ProjectsID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_PROJECTS.project) AS NameFull_Project ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_ROLES.id) AS NameFull_RolesID ,
-		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TMI_ROLES.role) AS NameFull_Role
-	FROM RECORDS_PROJECTS
-	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_PROJECTS.membersID
-	LEFT JOIN TMI_QUALIFICATIONS ON TMI_QUALIFICATIONS.id = RECORDS_PROJECTS.qualificationsID
-	LEFT JOIN TMI_TRACKS ON TMI_TRACKS.id = TMI_QUALIFICATIONS.tracksID
-	LEFT JOIN TMI_PROJECTS ON TMI_PROJECTS.id = RECORDS_PROJECTS.projectsID
-	LEFT JOIN TMI_ROLES ON TMI_ROLES.id = RECORDS_PROJECTS.rolesID
-	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID
-	LEFT JOIN TMI_MANUALS ON TMI_MANUALS.id = TMI_PROJECTS.manualsID
-	LEFT JOIN TMI_MANUAL_GROUPS ON TMI_MANUAL_GROUPS.id = TMI_MANUALS.manual_groupsID;
--- SELECT * FROM TTX_RECORDS_PROJECTS0;
-
--- Lists projects including duplicates + Qualification Status: ALL MEMBERS
-DROP TEMPORARY TABLE IF EXISTS TTX_RECORDS_PROJECTS0;
-CREATE TEMPORARY TABLE TTX_RECORDS_PROJECTS0 AS
-	SELECT
-		TTX_RECORDS_PROJECTS0.RP_ID AS RP_ID ,
-		TTX_RECORDS_PROJECTS0.MembersID AS MembersID ,
-		TTX_RECORDS_PROJECTS0.NameFull AS NameFull ,
-
-		TTX_RECORDS_PROJECTS0.TracksID AS TracksID ,
-		TTX_RECORDS_PROJECTS0.TracksOrder AS TracksOrder ,
-		TTX_RECORDS_PROJECTS0.Track AS Track ,
-
-		TTX_RECORDS_PROJECTS0.QualificationsID AS QualificationsID ,
-		TTX_RECORDS_PROJECTS0.QualificationsOrder AS QualificationsOrder ,
-		TTX_RECORDS_PROJECTS0.Qualification AS Qualification ,
-
-		TTX_RECORDS_PROJECTS0.ManualGroupsID AS ManualGroupsID ,
-		TTX_RECORDS_PROJECTS0.ManualGroupsOrder AS ManualGroupsOrder ,
-		TTX_RECORDS_PROJECTS0.ManualGroup AS ManualGroup ,
-
-		TTX_RECORDS_PROJECTS0.ManualsID AS ManualsID ,
-		TTX_RECORDS_PROJECTS0.ManualsOrder AS ManualsOrder ,
-		TTX_RECORDS_PROJECTS0.Manual AS Manual ,
-
-		TTX_RECORDS_PROJECTS0.ProjectsID AS ProjectsID ,
-		TTX_RECORDS_PROJECTS0.ProjectOrder AS ProjectsOrder ,
-		TTX_RECORDS_PROJECTS0.Project AS Project ,
-
-		TTX_RECORDS_PROJECTS0.RolesID AS RolesID ,
-		TTX_RECORDS_PROJECTS0.RolesOrder AS RolesOrder ,
-		TTX_RECORDS_PROJECTS0.Role AS Role ,
-
-		TTX_QUALIFICATIONS0.qualificationstatus AS QualificationStatus ,
-		TTX_RECORDS_PROJECTS0.Date1 AS Date1 ,
-		CAST(TTX_RECORDS_PROJECTS0.Date1 AS unsigned) AS Date1Num ,
-		TTX_RECORDS_PROJECTS0.Status1 AS Status1 ,
-		TTX_RECORDS_PROJECTS0.CurrentMember AS CurrentMember ,
-		TTX_RECORDS_PROJECTS0.Club AS Club ,
-		TTX_RECORDS_PROJECTS0.NameFull_QualificationsID AS NameFull_QualificationsID ,
-		TTX_RECORDS_PROJECTS0.NameFull_Qualification AS NameFull_Qualification ,
-		TTX_RECORDS_PROJECTS0.NameFull_ProjectsID AS NameFull_ProjectsID ,
-		TTX_RECORDS_PROJECTS0.NameFull_Project AS NameFull_Project ,
-		TTX_RECORDS_PROJECTS0.NameFull_RolesID AS NameFull_RolesID ,
-		TTX_RECORDS_PROJECTS0.NameFull_Role AS NameFull_Role
-	FROM TTX_RECORDS_PROJECTS0
-	LEFT JOIN TTX_QUALIFICATIONS0 ON TTX_QUALIFICATIONS0.NameFull_Qualification = TTX_RECORDS_PROJECTS0.NameFull_Qualification;
--- SELECT * FROM TTX_RECORDS_PROJECTS0
-*/
-
--- ========================  TTX_MOSTRECENTPROJECT 0 ========================
+-- ========================  MOSTRECENTPROJECT ========================
 
 -- Lists members most recent projects excluding duplicates: ALL MEMBERS
 
-DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTPROJECT_SETUP1;
-CREATE TEMPORARY TABLE TTX_MOSTRECENTPROJECT_SETUP1 AS
+
+DROP TABLE IF EXISTS TX_MOSTRECENTPROJECT_SETUP1;
+CREATE TABLE TX_MOSTRECENTPROJECT_SETUP1
+	(
+		id SERIAL ,
+
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+		Club VARCHAR(255) ,
+		CurrentMember VARCHAR(255) ,
+		Track VARCHAR(255) ,
+
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+		QualificationStatus VARCHAR(255) ,
+
+		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsOrder INT ,
+		ManualGroup VARCHAR(255) ,
+
+		ManualsID bigint(40) unsigned ,
+		ManualsOrder INT ,
+		Manual VARCHAR(255) ,
+
+		ProjectsID bigint(40) unsigned ,
+		ProjectsOrder INT ,
+		Project VARCHAR(255) ,
+
+		RolesID bigint(40) unsigned ,
+		RolesOrder INT ,
+		Role VARCHAR(255) ,
+
+		Status1 VARCHAR(255) ,
+		Date1 DATE ,
+		Date1Num INT,
+		NameFull_ProjectsID VARCHAR(255) ,
+		NameFull_RolesID VARCHAR(255)
+	);
+
+INSERT INTO TX_MOSTRECENTPROJECT_SETUP1
+		(
+			MembersID ,
+			NameFull ,
+			Club ,
+			CurrentMember ,
+			Track ,
+
+			QualificationsID ,
+			QualificationsOrder ,
+			Qualification ,
+			QualificationShort ,
+			QualificationStatus ,
+
+			ManualGroupsID ,
+			ManualGroupsOrder ,
+			ManualGroup ,
+
+			ManualsID ,
+			ManualsOrder ,
+			Manual ,
+
+			ProjectsID ,
+			ProjectsOrder ,
+			Project ,
+
+			RolesID ,
+			RolesOrder ,
+			Role ,
+
+			Status1 ,
+			Date1 ,
+			Date1Num ,
+			NameFull_ProjectsID ,
+			NameFull_RolesID
+		)
   SELECT
-    MembersID ,
-    NameFull ,
-    Club ,
-    CurrentMember ,
-    Track ,
-    QualificationsID ,
-    QualificationsOrder ,
-    Qualification ,
+		MembersID ,
+		NameFull ,
+		Club ,
+		CurrentMember ,
+		Track ,
+
+		QualificationsID ,
+		QualificationsOrder ,
+		Qualification ,
 		QualificationShort ,
-    QualificationStatus ,
-    ManualGroupsID ,
-    ManualGroupsOrder ,
-    ManualGroup ,
-    ManualsID ,
-    ManualsOrder ,
-    Manual ,
-    ProjectsID ,
-    ProjectsOrder ,
-    Project ,
-    RolesID ,
-    RolesOrder ,
-    Role ,
-    Status1 ,
-    Date1 ,
-    Date1Num ,
-    NameFull_ProjectsID ,
-    NameFull_RolesID
-  FROM TTX_RECORDS_PROJECTS0;
--- SELECT * FROM TTX_MOSTRECENTPROJECT_SETUP1;
+		QualificationStatus ,
 
-DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTPROJECT_SETUP2;
-CREATE TEMPORARY TABLE TTX_MOSTRECENTPROJECT_SETUP2 AS
+		ManualGroupsID ,
+		ManualGroupsOrder ,
+		ManualGroup ,
+
+		ManualsID ,
+		ManualsOrder ,
+		Manual ,
+
+		ProjectsID ,
+		ProjectsOrder ,
+		Project ,
+
+		RolesID ,
+		RolesOrder ,
+		Role ,
+
+		Status1 ,
+		Date1 ,
+		Date1Num ,
+		NameFull_ProjectsID ,
+		NameFull_RolesID
+  FROM TX_RECORDS_PROJECTS0;
+SELECT * FROM TX_MOSTRECENTPROJECT_SETUP1;
+
+
+DROP TABLE IF EXISTS TX_MOSTRECENTPROJECT_SETUP2;
+CREATE TABLE TX_MOSTRECENTPROJECT_SETUP2
+	(
+		id SERIAL ,
+		NameFull_ProjectsID VARCHAR(255) ,
+		Date1Num INT
+	);
+
+INSERT INTO TX_MOSTRECENTPROJECT_SETUP2
+	(
+		NameFull_ProjectsID ,
+		Date1Num
+	)
   SELECT
-		NameFull_ProjectsID AS NameFull_ProjectsID,
-		MAX(Date1Num) AS Date1Num
-  FROM TTX_RECORDS_PROJECTS0
-  GROUP BY NameFull_ProjectsID;
--- SELECT * FROM TTX_MOSTRECENTPROJECT_SETUP2;
+			NameFull_ProjectsID,
+			MAX(Date1Num)
+  	FROM TX_RECORDS_PROJECTS0
+  	GROUP BY NameFull_ProjectsID;
+SELECT * FROM TX_MOSTRECENTPROJECT_SETUP2;
 
-DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTPROJECT0;
-CREATE TEMPORARY TABLE TTX_MOSTRECENTPROJECT0 AS
+
+DROP TABLE IF EXISTS TX_MOSTRECENTPROJECT0;
+CREATE TABLE TX_MOSTRECENTPROJECT0
+	(
+		id SERIAL ,
+
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+		Club VARCHAR(255) ,
+		CurrentMember VARCHAR(255) ,
+		Track VARCHAR(255) ,
+
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+		QualificationStatus VARCHAR(255) ,
+
+		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsOrder INT ,
+		ManualGroup VARCHAR(255) ,
+
+		ManualsID bigint(40) unsigned ,
+		ManualsOrder INT ,
+		Manual VARCHAR(255) ,
+
+		ProjectsID bigint(40) unsigned ,
+		ProjectsOrder INT ,
+		Project VARCHAR(255) ,
+
+		RolesID bigint(40) unsigned ,
+		RolesOrder INT ,
+		Role VARCHAR(255) ,
+
+		Status1 VARCHAR(255) ,
+		Date1 DATE ,
+		Date1Num INT ,
+		NameFull_ProjectsID VARCHAR(255) ,
+		NameFull_RolesID VARCHAR(255)
+	);
+
+
+INSERT INTO TX_MOSTRECENTPROJECT0
+		(
+			MembersID ,
+			NameFull ,
+			Club ,
+			CurrentMember ,
+			Track ,
+
+			QualificationsID ,
+			QualificationsOrder ,
+			Qualification ,
+			QualificationShort ,
+			QualificationStatus ,
+
+			ManualGroupsID ,
+			ManualGroupsOrder ,
+			ManualGroup ,
+
+			ManualsID ,
+			ManualsOrder ,
+			Manual ,
+
+			ProjectsID ,
+			ProjectsOrder ,
+			Project ,
+
+			RolesID ,
+			RolesOrder ,
+			Role ,
+
+			Status1 ,
+			Date1 ,
+			Date1Num ,
+			NameFull_ProjectsID ,
+			NameFull_RolesID
+		)
 SELECT
-  MembersID ,
-  NameFull ,
-  Club ,
-  CurrentMember ,
-  Track ,
-  QualificationsID ,
-  QualificationsOrder ,
-  Qualification ,
+	MembersID ,
+	NameFull ,
+	Club ,
+	CurrentMember ,
+	Track ,
+
+	QualificationsID ,
+	QualificationsOrder ,
+	Qualification ,
 	QualificationShort ,
-  QualificationStatus ,
-  ManualGroupsID ,
-  ManualGroupsOrder ,
-  ManualGroup ,
-  ManualsID ,
-  ManualsOrder ,
-  Manual ,
-  ProjectsID ,
-  ProjectsOrder ,
-  Project ,
-  RolesID ,
-  RolesOrder ,
-  Role ,
-  Status1 ,
-  Date1 ,
-  TTX_MOSTRECENTPROJECT_SETUP1.Date1Num ,
-  TTX_MOSTRECENTPROJECT_SETUP1.NameFull_ProjectsID ,
-  NameFull_RolesID
-FROM TTX_MOSTRECENTPROJECT_SETUP1
-INNER JOIN TTX_MOSTRECENTPROJECT_SETUP2
+	QualificationStatus ,
+
+	ManualGroupsID ,
+	ManualGroupsOrder ,
+	ManualGroup ,
+
+	ManualsID ,
+	ManualsOrder ,
+	Manual ,
+
+	ProjectsID ,
+	ProjectsOrder ,
+	Project ,
+
+	RolesID ,
+	RolesOrder ,
+	Role ,
+
+	Status1 ,
+	Date1 ,
+	TX_MOSTRECENTPROJECT_SETUP1.Date1Num ,
+	TX_MOSTRECENTPROJECT_SETUP1.NameFull_ProjectsID ,
+	NameFull_RolesID
+FROM TX_MOSTRECENTPROJECT_SETUP1
+INNER JOIN TX_MOSTRECENTPROJECT_SETUP2
   ON
-    TTX_MOSTRECENTPROJECT_SETUP1.NameFull_ProjectsID = TTX_MOSTRECENTPROJECT_SETUP2.NameFull_ProjectsID
-    AND TTX_MOSTRECENTPROJECT_SETUP1.Date1Num = TTX_MOSTRECENTPROJECT_SETUP2.Date1Num;
--- SELECT * FROM TTX_MOSTRECENTPROJECT0;
+		TX_MOSTRECENTPROJECT_SETUP1.NameFull_ProjectsID = TX_MOSTRECENTPROJECT_SETUP2.NameFull_ProjectsID
+		AND TX_MOSTRECENTPROJECT_SETUP1.Date1Num = TX_MOSTRECENTPROJECT_SETUP2.Date1Num;
+SELECT * FROM TX_MOSTRECENTPROJECT0;
 
 
--- ========================  TTX_MOSTRECENTROLE 0 ========================
+-- ========================  MOSTRECENTROLE  ========================
 
 
 -- Lists most recent role: ALL MEMBERS
+DROP TABLE IF EXISTS TX_MOSTRECENTROLE_SETUP1;
+CREATE TABLE TX_MOSTRECENTROLE_SETUP1
+	(
+		id SERIAL ,
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+		Club VARCHAR(255) ,
+		CurrentMember VARCHAR(255) ,
 
+		TracksID bigint(40) unsigned ,
+		Track VARCHAR(255) ,
 
-DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTROLE_SETUP1;
-CREATE TEMPORARY TABLE TTX_MOSTRECENTROLE_SETUP1 AS
-    SELECT
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+
+		RolesID bigint(40) unsigned ,
+		RolesOrder INT ,
+		Role VARCHAR(255) ,
+
+		Status1 VARCHAR(255) ,
+		Date1 DATE ,
+		Date1Num INT ,
+		NameFull_Role VARCHAR(255) ,
+		NameFull_ProjectsID VARCHAR(255) ,
+		NameFull_RolesID VARCHAR(255)
+	);
+
+INSERT INTO TX_MOSTRECENTROLE_SETUP1
+		(
 			MembersID,
 			NameFull ,
 			Club ,
 			CurrentMember ,
+
 			TracksID,
 			Track ,
+
 			QualificationsID ,
 			QualificationsOrder ,
 			Qualification ,
 			QualificationShort ,
+
 			RolesID ,
 			RolesOrder ,
 			Role ,
+
 			Status1 ,
 			Date1 ,
 			Date1Num ,
 			NameFull_Role ,
 			NameFull_ProjectsID ,
 			NameFull_RolesID
-    FROM TTX_RECORDS_PROJECTS0;
--- SELECT * FROM TTX_MOSTRECENTROLE_SETUP1;
+		)
+	SELECT
+		MembersID,
+		NameFull ,
+		Club ,
+		CurrentMember ,
 
-DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTROLE_SETUP2;
-CREATE TEMPORARY TABLE TTX_MOSTRECENTROLE_SETUP2 AS
-    SELECT
+		TracksID,
+		Track ,
+
+		QualificationsID ,
+		QualificationsOrder ,
+		Qualification ,
+		QualificationShort ,
+
+		RolesID ,
+		RolesOrder ,
+		Role ,
+
+		Status1 ,
+		Date1 ,
+		Date1Num ,
+		NameFull_Role ,
+		NameFull_ProjectsID ,
+		NameFull_RolesID
+	FROM TX_RECORDS_PROJECTS0;
+SELECT * FROM TX_MOSTRECENTROLE_SETUP1;
+
+
+-- Lists most recent role: ALL MEMBERS
+DROP TABLE IF EXISTS TX_MOSTRECENTROLE_SETUP2;
+CREATE TABLE TX_MOSTRECENTROLE_SETUP2
+		(
+			id SERIAL ,
+			MembersID bigint(40) unsigned ,
+			NameFull VARCHAR(255) ,
+			Club VARCHAR(255) ,
+			CurrentMember VARCHAR(255) ,
+
+			TracksID bigint(40) unsigned ,
+			Track VARCHAR(255) ,
+
+			QualificationsID bigint(40) unsigned ,
+			QualificationsOrder INT ,
+			Qualification VARCHAR(255) ,
+			QualificationShort VARCHAR(255) ,
+
+			RolesID bigint(40) unsigned ,
+			RolesOrder INT ,
+			Role VARCHAR(255) ,
+
+			Status1 VARCHAR(255) ,
+			Date1 DATE ,
+			Date1Num INT ,
+			NameFull_Role VARCHAR(255) ,
+			NameFull_ProjectsID VARCHAR(255) ,
+			NameFull_RolesID VARCHAR(255)
+		);
+
+INSERT INTO TX_MOSTRECENTROLE_SETUP2
+		(
 			MembersID,
 			NameFull ,
 			Club ,
 			CurrentMember ,
+
 			TracksID,
 			Track ,
+
 			QualificationsID ,
 			QualificationsOrder ,
 			Qualification ,
 			QualificationShort ,
+
 			RolesID ,
 			RolesOrder ,
 			Role ,
+
 			Status1 ,
 			Date1 ,
 			Date1Num ,
 			NameFull_Role ,
 			NameFull_ProjectsID ,
 			NameFull_RolesID
-    FROM TTX_RECORDS_PROJECTS0;
--- SELECT * FROM TTX_MOSTRECENTROLE_SETUP2;
+		)
+  SELECT
+			MembersID,
+			NameFull ,
+			Club ,
+			CurrentMember ,
+
+			TracksID,
+			Track ,
+
+			QualificationsID ,
+			QualificationsOrder ,
+			Qualification ,
+			QualificationShort ,
+
+			RolesID ,
+			RolesOrder ,
+			Role ,
+
+			Status1 ,
+			Date1 ,
+			Date1Num ,
+			NameFull_Role ,
+			NameFull_ProjectsID ,
+			NameFull_RolesID
+  FROM TX_RECORDS_PROJECTS0;
+SELECT * FROM TX_MOSTRECENTROLE_SETUP2;
 
 SET SESSION sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DROP TEMPORARY TABLE IF EXISTS TTX_MOSTRECENTROLE0;
-CREATE TEMPORARY TABLE TTX_MOSTRECENTROLE0 AS
+DROP TABLE IF EXISTS TX_MOSTRECENTROLE0;
+CREATE TABLE TX_MOSTRECENTROLE0
+	(
+		id SERIAL ,
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+		Club VARCHAR(255) ,
+		CurrentMember VARCHAR(255) ,
+		TracksID bigint(40) unsigned ,
+		Track VARCHAR(255) ,
+		QualificationsID bigint(40) unsigned ,
+		QualificationsOrder INT ,
+		Qualification VARCHAR(255) ,
+		QualificationShort VARCHAR(255) ,
+		RolesID bigint(40) unsigned ,
+		RolesOrder INT ,
+		Role VARCHAR(255) ,
+		Status1 VARCHAR(255) ,
+		Date1 DATE ,
+		Date1Num INT ,
+		NameFull_Role VARCHAR(255) ,
+		NameFull_ProjectsID VARCHAR(255) ,
+		NameFull_RolesID VARCHAR(255)
+	);
+
+INSERT INTO TX_MOSTRECENTROLE0
+			(
+				MembersID,
+				NameFull ,
+				Club ,
+				CurrentMember ,
+				TracksID,
+				Track ,
+				QualificationsID ,
+				QualificationsOrder ,
+				Qualification ,
+				QualificationShort ,
+				RolesID ,
+				RolesOrder ,
+				Role ,
+				Status1 ,
+				Date1 ,
+				Date1Num ,
+				NameFull_Role ,
+				NameFull_ProjectsID ,
+				NameFull_RolesID
+			)
     SELECT
-        TTX_MOSTRECENTROLE_SETUP1.MembersID AS MembersID,
-        TTX_MOSTRECENTROLE_SETUP1.NameFull AS NameFull ,
-        TTX_MOSTRECENTROLE_SETUP1.Club AS Club ,
-        TTX_MOSTRECENTROLE_SETUP1.CurrentMember AS CurrentMember ,
-        TTX_MOSTRECENTROLE_SETUP1.TracksID AS TracksID,
-        TTX_MOSTRECENTROLE_SETUP1.Track AS Track ,
-        TTX_MOSTRECENTROLE_SETUP1.QualificationsID AS QualificationsID ,
-        TTX_MOSTRECENTROLE_SETUP1.QualificationsOrder AS QualificationsOrder ,
-        TTX_MOSTRECENTROLE_SETUP1.Qualification AS Qualification ,
-				TTX_MOSTRECENTROLE_SETUP1.QualificationShort AS QualificationShort ,
-        TTX_MOSTRECENTROLE_SETUP1.RolesID AS RolesID ,
-        TTX_MOSTRECENTROLE_SETUP1.RolesOrder AS RolesOrder ,
-        TTX_MOSTRECENTROLE_SETUP1.Role AS Role ,
-        TTX_MOSTRECENTROLE_SETUP1.Status1 AS Status1 ,
-        TTX_MOSTRECENTROLE_SETUP1.Date1 AS Date1 ,
-        TTX_MOSTRECENTROLE_SETUP1.Date1Num AS Date1Num ,
-        TTX_MOSTRECENTROLE_SETUP1.NameFull_Role as NameFull_Role ,
-        TTX_MOSTRECENTROLE_SETUP1.NameFull_ProjectsID AS NameFull_ProjectsID ,
-        TTX_MOSTRECENTROLE_SETUP1.NameFull_RolesID as NameFull_RolesID
-    FROM TTX_MOSTRECENTROLE_SETUP1
-    LEFT OUTER JOIN TTX_MOSTRECENTROLE_SETUP2
-        ON TTX_MOSTRECENTROLE_SETUP1.NameFull_Role = TTX_MOSTRECENTROLE_SETUP2.NameFull_Role AND TTX_MOSTRECENTROLE_SETUP1.Date1Num < TTX_MOSTRECENTROLE_SETUP2.Date1Num
-        WHERE (TTX_MOSTRECENTROLE_SETUP2.NameFull_Role IS NULL)
-	GROUP BY TTX_MOSTRECENTROLE_SETUP1.NameFull , TTX_MOSTRECENTROLE_SETUP1.Role
-	ORDER BY TTX_MOSTRECENTROLE_SETUP1.NameFull , TTX_MOSTRECENTROLE_SETUP1.RolesOrder , TTX_MOSTRECENTROLE_SETUP1.Date1Num , TTX_MOSTRECENTROLE_SETUP1.NameFull;
-SELECT * FROM TTX_MOSTRECENTROLE0;
+			TX_MOSTRECENTROLE_SETUP1.MembersID ,
+			TX_MOSTRECENTROLE_SETUP1.NameFull ,
+			TX_MOSTRECENTROLE_SETUP1.Club ,
+			TX_MOSTRECENTROLE_SETUP1.CurrentMember ,
+			TX_MOSTRECENTROLE_SETUP1.TracksID ,
+			TX_MOSTRECENTROLE_SETUP1.Track ,
+			TX_MOSTRECENTROLE_SETUP1.QualificationsID ,
+			TX_MOSTRECENTROLE_SETUP1.QualificationsOrder ,
+			TX_MOSTRECENTROLE_SETUP1.Qualification ,
+			TX_MOSTRECENTROLE_SETUP1.QualificationShort ,
+			TX_MOSTRECENTROLE_SETUP1.RolesID ,
+			TX_MOSTRECENTROLE_SETUP1.RolesOrder ,
+			TX_MOSTRECENTROLE_SETUP1.Role ,
+			TX_MOSTRECENTROLE_SETUP1.Status1 ,
+			TX_MOSTRECENTROLE_SETUP1.Date1 ,
+			TX_MOSTRECENTROLE_SETUP1.Date1Num ,
+			TX_MOSTRECENTROLE_SETUP1.NameFull_Role ,
+			TX_MOSTRECENTROLE_SETUP1.NameFull_ProjectsID ,
+			TX_MOSTRECENTROLE_SETUP1.NameFull_RolesID
+    FROM TX_MOSTRECENTROLE_SETUP1
+    LEFT OUTER JOIN TX_MOSTRECENTROLE_SETUP2
+        ON TX_MOSTRECENTROLE_SETUP1.NameFull_Role = TX_MOSTRECENTROLE_SETUP2.NameFull_Role AND TX_MOSTRECENTROLE_SETUP1.Date1Num < TX_MOSTRECENTROLE_SETUP2.Date1Num
+    WHERE (TX_MOSTRECENTROLE_SETUP2.NameFull_Role IS NULL)
+		GROUP BY NameFull , Role
+		ORDER BY NameFull , RolesOrder , Date1Num , NameFull;
+SELECT * FROM TX_MOSTRECENTROLE0;
 
 /*
 SECTION 2 OF 2: CREATE A CURRENT MEMBERS AND CONTESTABLE ROLES
 */
 
--- ========================  TTX_ALLMEMBERS 0 ========================
+-- ========================  ALLMEMBERS ========================
 
 -- Lists current Members: ALL MEMBERS
-DROP TEMPORARY TABLE IF EXISTS TTX_ALLMEMBERS0;
-CREATE TEMPORARY TABLE TTX_ALLMEMBERS0 AS
-    SELECT
-				id AS MembersID ,
-				CONCAT(RECORDS_MEMBERS.namefirst , ' ' , RECORDS_MEMBERS.namelast) AS NameFull ,
-        currentclubs ,
-        currentmember
-    FROM RECORDS_MEMBERS;
-SELECT * FROM TTX_ALLMEMBERS0 ORDER BY currentclubs , currentmember , NameFull;
-SELECT * FROM TTX_ALLMEMBERS0;
+DROP TABLE IF EXISTS TX_ALLMEMBERS0;
+CREATE TABLE TX_ALLMEMBERS0
+	(
+		id SERIAL ,
+		MembersID bigint(40) unsigned ,
+		NameFull VARCHAR(255) ,
+		currentclubs VARCHAR(255) ,
+		currentmember VARCHAR(255)
+	);
 
--- ========================  TTX_RECORDS_MEMBER_UNAVAILABILITY 0 ========================
+INSERT INTO TX_ALLMEMBERS0
+		(
+			MembersID ,
+			NameFull ,
+			currentclubs ,
+			currentmember
+		)
+		SELECT
+			id ,
+			CONCAT(RECORDS_MEMBERS.namefirst , ' ' , RECORDS_MEMBERS.namelast) AS NameFull,
+			currentclubs ,
+			currentmember
+    FROM RECORDS_MEMBERS
+	ORDER BY currentclubs , currentmember , NameFull ;
+SELECT * FROM TX_ALLMEMBERS0;
 
-DROP TEMPORARY TABLE IF EXISTS TTX_RECORDS_MEMBER_UNAVAILABILITY0;
-CREATE TEMPORARY TABLE TTX_RECORDS_MEMBER_UNAVAILABILITY0 AS
+-- ========================  RECORDS_MEMBER_UNAVAILABILITY ========================
+
+DROP TABLE IF EXISTS TX_RECORDS_MEMBER_UNAVAILABILITY0;
+CREATE TABLE TX_RECORDS_MEMBER_UNAVAILABILITY0
+		(
+			id SERIAL ,
+			MembersID bigint(40) unsigned ,
+			NameFull VARCHAR(255) ,
+			RolesID bigint(40) unsigned ,
+			Role VARCHAR(255) ,
+			StartDate DATE ,
+			EndDate DATE ,
+			Notes VARCHAR(255) ,
+			NameFull_Role VARCHAR(255) ,
+			NameFull_RoleID VARCHAR(255)
+		);
+
+INSERT INTO TX_RECORDS_MEMBER_UNAVAILABILITY0
+	(
+		MembersID ,
+		NameFull ,
+		RolesID ,
+		Role ,
+		StartDate ,
+		EndDate ,
+		Notes ,
+		NameFull_Role ,
+		NameFull_RoleID
+	)
 	SELECT
 			RECORDS_MEMBER_UNAVAILABILITY.membersID AS MembersID ,
 			CONCAT(RECORDS_MEMBERS.namefirst , " " , RECORDS_MEMBERS.namelast) AS NameFull ,
@@ -481,27 +888,47 @@ CREATE TEMPORARY TABLE TTX_RECORDS_MEMBER_UNAVAILABILITY0 AS
 	FROM RECORDS_MEMBER_UNAVAILABILITY
 	LEFT JOIN RECORDS_MEMBERS ON RECORDS_MEMBERS.id = RECORDS_MEMBER_UNAVAILABILITY.MembersID
 	LEFT JOIN TMI_ROLES ON TMI_ROLES.id = RECORDS_MEMBER_UNAVAILABILITY.RolesID;
-SELECT * FROM TTX_RECORDS_MEMBER_UNAVAILABILITY0;
+SELECT * FROM TX_RECORDS_MEMBER_UNAVAILABILITY0;
 
 
--- ========================  TTX_CONTESTABLE_TMIROLES 0 ========================
+-- ========================  CONTESTABLE_TMIROLES ========================
 
 -- Lists All Contestable Roles
-DROP TEMPORARY TABLE IF EXISTS TTX_CONTESTABLE_TMIROLES0;
-CREATE TEMPORARY TABLE TTX_CONTESTABLE_TMIROLES0 AS
-    SELECT Role
-    FROM TMI_ROLES
-    WHERE contestable = 'Yes';
-SELECT * FROM TTX_CONTESTABLE_TMIROLES0;
+DROP TABLE IF EXISTS TX_CONTESTABLE_TMIROLES0;
+CREATE TABLE TX_CONTESTABLE_TMIROLES0
+		(
+			id SERIAL ,
+			Role VARCHAR(255)
+		);
 
--- ========================  TTX_CONTESTABLE_TMIROLES_TO_MEMBERS 0-2 ========================
+INSERT INTO TX_CONTESTABLE_TMIROLES0
+		(
+			Role
+		)
+  SELECT Role
+  FROM TMI_ROLES
+  WHERE contestable = 'Yes';
+SELECT * FROM TX_CONTESTABLE_TMIROLES0;
+
+-- ========================  CONTESTABLE_TMIROLES_TO_MEMBERS ========================
 
 -- CROSS JOIN MEMBERS & CONTESTABLE ROLES: All Members
-DROP TEMPORARY TABLE IF EXISTS TTX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
-CREATE TEMPORARY TABLE TTX_CONTESTABLE_TMIROLES_TO_MEMBERS0 AS
+DROP TABLE IF EXISTS TX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
+CREATE TABLE TX_CONTESTABLE_TMIROLES_TO_MEMBERS0
+		(
+			id SERIAL ,
+			Role VARCHAR(255) ,
+			NameFull_Role1 VARCHAR(255)
+		);
+
+INSERT INTO TX_CONTESTABLE_TMIROLES_TO_MEMBERS0
+	(
+		Role ,
+		NameFull_Role1
+	)
     SELECT
-			* ,
-			CONCAT(TTX_ALLMEMBERS0.NameFull , ' - ' , TTX_CONTESTABLE_TMIROLES0.Role) AS NameFull_Role1
-    FROM TTX_CONTESTABLE_TMIROLES0
-    CROSS JOIN TTX_ALLMEMBERS0;
-SELECT * FROM TTX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
+			TX_CONTESTABLE_TMIROLES0.Role ,
+			CONCAT(TX_ALLMEMBERS0.NameFull , ' - ' , TX_CONTESTABLE_TMIROLES0.Role) AS NameFull_Role1
+    FROM TX_CONTESTABLE_TMIROLES0
+    CROSS JOIN TX_ALLMEMBERS0;
+SELECT * FROM TX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
