@@ -7,25 +7,32 @@ DROP TABLE IF EXISTS TX_TMI_STRUCTURE0;
 CREATE TABLE TX_TMI_STRUCTURE0
 	(
 		id Serial ,
+
 		TracksID bigint(40) unsigned ,
 		TracksOrder INT ,
 		Track VARCHAR(255) ,
+
 		QualificationsID bigint(40) unsigned ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
+
 		ManualGroupsID bigint(40) unsigned ,
 		ManualGroupsOrder INT ,
 		ManualGroup VARCHAR(255) ,
+
 		ManualsID bigint(40) unsigned ,
 		ManualsOrder INT ,
 		Manual VARCHAR(255) ,
+
 		ProjectsID bigint(40) unsigned ,
 		ProjectsOrder INT ,
 		Project VARCHAR(255) ,
+
 		RolesID bigint(40) unsigned ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
+
 		QualificationProject VARCHAR(255)
 	);
 
@@ -34,44 +41,56 @@ INSERT INTO TX_TMI_STRUCTURE0
 			TracksID ,
 			TracksOrder ,
 			Track ,
+
 			QualificationsID ,
 			QualificationsOrder ,
 			Qualification ,
 			QualificationShort ,
+
 			ManualGroupsID ,
 			ManualGroupsOrder ,
 			ManualGroup ,
+
 			ManualsID ,
 			ManualsOrder ,
 			Manual ,
+
 			ProjectsID ,
 			ProjectsOrder ,
 			Project ,
+
 			RolesID ,
 			RolesOrder ,
 			Role ,
+
 			QualificationProject
 		)
 	SELECT
 		TMI_TRACKS.id ,
 		TMI_TRACKS.tmiorder ,
 		TMI_TRACKS.track ,
+
 		TMI_QUALIFICATIONS.id ,
 		TMI_QUALIFICATIONS.tmiorder ,
 		TMI_QUALIFICATIONS.qualification ,
 		TMI_QUALIFICATIONS.qualificationshort ,
+
 		TMI_MANUAL_GROUPS.id ,
 		TMI_MANUAL_GROUPS.tmiorder ,
 		TMI_MANUAL_GROUPS.manual_group ,
+
 		TMI_MANUALS.id ,
 		TMI_MANUALS.tmiorder ,
 		TMI_MANUALS.manual ,
+
 		TMI_PROJECTS.id ,
 		TMI_PROJECTS.tmiorder ,
 		TMI_PROJECTS.project ,
+
 		TMI_ROLES.id ,
 		TMI_ROLES.tmiorder ,
 		TMI_ROLES.role ,
+
 		CONCAT(TMI_QUALIFICATIONS.id , '-', TMI_PROJECTS.id)
 	FROM TMI_PROJECTS
 	LEFT JOIN TMI_ROLES ON TMI_ROLES.id = TMI_PROJECTS.rolesID
@@ -94,56 +113,68 @@ DROP TABLE IF EXISTS TX_QUALIFICATIONS0;
 CREATE TABLE TX_QUALIFICATIONS0
 	(
 		id SERIAL ,
+
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
+
 		TracksID bigint(40) unsigned ,
 		TracksOrder INT ,
 		Track VARCHAR(255) ,
+
 		QualificationsID bigint(40) unsigned ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 		QualificationDate DATE ,
 		QualificationStatus VARCHAR(255),
+
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
+
 		NameFull_QualificationsID VARCHAR(255) ,
 		NameFull_Qualification VARCHAR(255)
 	);
-
 
 INSERT INTO TX_QUALIFICATIONS0
 		(
 			MembersID ,
 			NameFull ,
+
 			TracksID ,
 			TracksOrder ,
 			Track ,
+
 			QualificationsID ,
 			QualificationsOrder ,
 			Qualification ,
 			QualificationShort ,
 			QualificationDate ,
 			QualificationStatus ,
+
 			Club ,
 			CurrentMember ,
+
 			NameFull_QualificationsID ,
 			NameFull_Qualification
 		)
 	SELECT
 		RECORDS_QUALIFICATIONS.membersID AS MembersID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast) AS NameFull ,
+
 		TMI_TRACKS.id AS TracksID ,
 		TMI_TRACKS.tmiorder AS TracksOrder ,
 		TMI_TRACKS.track AS Track ,
+
 		TMI_QUALIFICATIONS.id AS QualificationsID ,
 		TMI_QUALIFICATIONS.tmiorder AS QualificationsOrder ,
 		TMI_QUALIFICATIONS.qualification AS Qualification ,
 		TMI_QUALIFICATIONS.qualificationshort AS QualificationShort ,
 		RECORDS_QUALIFICATIONS.qualificationdate AS QualificationDate,
 		RECORDS_QUALIFICATIONS.qualificationstatus AS QualificationStatus ,
+
 		RECORDS_CLUBS.name AS Club ,
 		RECORDS_MEMBERS.currentmember AS CurrentMember ,
+
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TMI_QUALIFICATIONS.id) AS NameFull_QualificationsID ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TMI_QUALIFICATIONS.qualification) AS NameFull_Qualification
 	FROM RECORDS_QUALIFICATIONS
@@ -349,6 +380,7 @@ CREATE TABLE TX_MOSTRECENTPROJECT_SETUP1
 		Status1 VARCHAR(255) ,
 		Date1 DATE ,
 		Date1Num INT,
+
 		NameFull_ProjectsID VARCHAR(255) ,
 		NameFull_RolesID VARCHAR(255)
 	);
@@ -386,6 +418,7 @@ INSERT INTO TX_MOSTRECENTPROJECT_SETUP1
 			Status1 ,
 			Date1 ,
 			Date1Num ,
+
 			NameFull_ProjectsID ,
 			NameFull_RolesID
 		)
@@ -421,10 +454,11 @@ INSERT INTO TX_MOSTRECENTPROJECT_SETUP1
 		Status1 ,
 		Date1 ,
 		Date1Num ,
+
 		NameFull_ProjectsID ,
 		NameFull_RolesID
   FROM TX_RECORDS_PROJECTS0;
-SELECT * FROM TX_MOSTRECENTPROJECT_SETUP1;
+-- SELECT * FROM TX_MOSTRECENTPROJECT_SETUP1;
 
 
 DROP TABLE IF EXISTS TX_MOSTRECENTPROJECT_SETUP2;
@@ -445,7 +479,7 @@ INSERT INTO TX_MOSTRECENTPROJECT_SETUP2
 			MAX(Date1Num)
   	FROM TX_RECORDS_PROJECTS0
   	GROUP BY NameFull_ProjectsID;
-SELECT * FROM TX_MOSTRECENTPROJECT_SETUP2;
+-- SELECT * FROM TX_MOSTRECENTPROJECT_SETUP2;
 
 
 DROP TABLE IF EXISTS TX_MOSTRECENTPROJECT0;
@@ -484,10 +518,10 @@ CREATE TABLE TX_MOSTRECENTPROJECT0
 		Status1 VARCHAR(255) ,
 		Date1 DATE ,
 		Date1Num INT ,
+
 		NameFull_ProjectsID VARCHAR(255) ,
 		NameFull_RolesID VARCHAR(255)
 	);
-
 
 INSERT INTO TX_MOSTRECENTPROJECT0
 		(
@@ -522,6 +556,7 @@ INSERT INTO TX_MOSTRECENTPROJECT0
 			Status1 ,
 			Date1 ,
 			Date1Num ,
+
 			NameFull_ProjectsID ,
 			NameFull_RolesID
 		)
@@ -557,6 +592,7 @@ SELECT
 	Status1 ,
 	Date1 ,
 	TX_MOSTRECENTPROJECT_SETUP1.Date1Num ,
+
 	TX_MOSTRECENTPROJECT_SETUP1.NameFull_ProjectsID ,
 	NameFull_RolesID
 FROM TX_MOSTRECENTPROJECT_SETUP1
@@ -575,6 +611,7 @@ DROP TABLE IF EXISTS TX_MOSTRECENTROLE_SETUP1;
 CREATE TABLE TX_MOSTRECENTROLE_SETUP1
 	(
 		id SERIAL ,
+
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
 		Club VARCHAR(255) ,
@@ -595,6 +632,7 @@ CREATE TABLE TX_MOSTRECENTROLE_SETUP1
 		Status1 VARCHAR(255) ,
 		Date1 DATE ,
 		Date1Num INT ,
+
 		NameFull_Role VARCHAR(255) ,
 		NameFull_ProjectsID VARCHAR(255) ,
 		NameFull_RolesID VARCHAR(255)
@@ -622,6 +660,7 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP1
 			Status1 ,
 			Date1 ,
 			Date1Num ,
+
 			NameFull_Role ,
 			NameFull_ProjectsID ,
 			NameFull_RolesID
@@ -647,11 +686,12 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP1
 		Status1 ,
 		Date1 ,
 		Date1Num ,
+
 		NameFull_Role ,
 		NameFull_ProjectsID ,
 		NameFull_RolesID
 	FROM TX_RECORDS_PROJECTS0;
-SELECT * FROM TX_MOSTRECENTROLE_SETUP1;
+-- SELECT * FROM TX_MOSTRECENTROLE_SETUP1;
 
 
 -- Lists most recent role: ALL MEMBERS
@@ -659,6 +699,7 @@ DROP TABLE IF EXISTS TX_MOSTRECENTROLE_SETUP2;
 CREATE TABLE TX_MOSTRECENTROLE_SETUP2
 		(
 			id SERIAL ,
+
 			MembersID bigint(40) unsigned ,
 			NameFull VARCHAR(255) ,
 			Club VARCHAR(255) ,
@@ -679,6 +720,7 @@ CREATE TABLE TX_MOSTRECENTROLE_SETUP2
 			Status1 VARCHAR(255) ,
 			Date1 DATE ,
 			Date1Num INT ,
+
 			NameFull_Role VARCHAR(255) ,
 			NameFull_ProjectsID VARCHAR(255) ,
 			NameFull_RolesID VARCHAR(255)
@@ -706,6 +748,7 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP2
 			Status1 ,
 			Date1 ,
 			Date1Num ,
+
 			NameFull_Role ,
 			NameFull_ProjectsID ,
 			NameFull_RolesID
@@ -731,33 +774,40 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP2
 			Status1 ,
 			Date1 ,
 			Date1Num ,
+
 			NameFull_Role ,
 			NameFull_ProjectsID ,
 			NameFull_RolesID
   FROM TX_RECORDS_PROJECTS0;
-SELECT * FROM TX_MOSTRECENTROLE_SETUP2;
+-- SELECT * FROM TX_MOSTRECENTROLE_SETUP2;
 
 SET SESSION sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DROP TABLE IF EXISTS TX_MOSTRECENTROLE0;
 CREATE TABLE TX_MOSTRECENTROLE0
 	(
 		id SERIAL ,
+
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
+
 		TracksID bigint(40) unsigned ,
 		Track VARCHAR(255) ,
+
 		QualificationsID bigint(40) unsigned ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
+
 		RolesID bigint(40) unsigned ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
+
 		Status1 VARCHAR(255) ,
 		Date1 DATE ,
 		Date1Num INT ,
+
 		NameFull_Role VARCHAR(255) ,
 		NameFull_ProjectsID VARCHAR(255) ,
 		NameFull_RolesID VARCHAR(255)
@@ -769,18 +819,23 @@ INSERT INTO TX_MOSTRECENTROLE0
 				NameFull ,
 				Club ,
 				CurrentMember ,
+
 				TracksID,
 				Track ,
+
 				QualificationsID ,
 				QualificationsOrder ,
 				Qualification ,
 				QualificationShort ,
+
 				RolesID ,
 				RolesOrder ,
 				Role ,
+
 				Status1 ,
 				Date1 ,
 				Date1Num ,
+
 				NameFull_Role ,
 				NameFull_ProjectsID ,
 				NameFull_RolesID
@@ -790,18 +845,23 @@ INSERT INTO TX_MOSTRECENTROLE0
 			TX_MOSTRECENTROLE_SETUP1.NameFull ,
 			TX_MOSTRECENTROLE_SETUP1.Club ,
 			TX_MOSTRECENTROLE_SETUP1.CurrentMember ,
+
 			TX_MOSTRECENTROLE_SETUP1.TracksID ,
 			TX_MOSTRECENTROLE_SETUP1.Track ,
+
 			TX_MOSTRECENTROLE_SETUP1.QualificationsID ,
 			TX_MOSTRECENTROLE_SETUP1.QualificationsOrder ,
 			TX_MOSTRECENTROLE_SETUP1.Qualification ,
 			TX_MOSTRECENTROLE_SETUP1.QualificationShort ,
+
 			TX_MOSTRECENTROLE_SETUP1.RolesID ,
 			TX_MOSTRECENTROLE_SETUP1.RolesOrder ,
 			TX_MOSTRECENTROLE_SETUP1.Role ,
+
 			TX_MOSTRECENTROLE_SETUP1.Status1 ,
 			TX_MOSTRECENTROLE_SETUP1.Date1 ,
 			TX_MOSTRECENTROLE_SETUP1.Date1Num ,
+
 			TX_MOSTRECENTROLE_SETUP1.NameFull_Role ,
 			TX_MOSTRECENTROLE_SETUP1.NameFull_ProjectsID ,
 			TX_MOSTRECENTROLE_SETUP1.NameFull_RolesID
@@ -824,6 +884,7 @@ DROP TABLE IF EXISTS TX_ALLMEMBERS0;
 CREATE TABLE TX_ALLMEMBERS0
 	(
 		id SERIAL ,
+
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
 		currentclubs VARCHAR(255) ,
@@ -852,13 +913,17 @@ DROP TABLE IF EXISTS TX_RECORDS_MEMBER_UNAVAILABILITY0;
 CREATE TABLE TX_RECORDS_MEMBER_UNAVAILABILITY0
 		(
 			id SERIAL ,
+
 			MembersID bigint(40) unsigned ,
 			NameFull VARCHAR(255) ,
+
 			RolesID bigint(40) unsigned ,
 			Role VARCHAR(255) ,
+
 			StartDate DATE ,
 			EndDate DATE ,
 			Notes VARCHAR(255) ,
+
 			NameFull_Role VARCHAR(255) ,
 			NameFull_RoleID VARCHAR(255)
 		);
@@ -867,22 +932,28 @@ INSERT INTO TX_RECORDS_MEMBER_UNAVAILABILITY0
 	(
 		MembersID ,
 		NameFull ,
+
 		RolesID ,
 		Role ,
+
 		StartDate ,
 		EndDate ,
 		Notes ,
+
 		NameFull_Role ,
 		NameFull_RoleID
 	)
 	SELECT
 			RECORDS_MEMBER_UNAVAILABILITY.membersID AS MembersID ,
 			CONCAT(RECORDS_MEMBERS.namefirst , " " , RECORDS_MEMBERS.namelast) AS NameFull ,
+
 			RECORDS_MEMBER_UNAVAILABILITY.rolesID AS RolesID ,
 			TMI_ROLES.Role AS Role ,
+
 			RECORDS_MEMBER_UNAVAILABILITY.startdate AS StartDate ,
 			RECORDS_MEMBER_UNAVAILABILITY.enddate AS EndDate ,
 			RECORDS_MEMBER_UNAVAILABILITY.notes AS Notes ,
+
 			CONCAT(RECORDS_MEMBERS.namefirst , " " , RECORDS_MEMBERS.namelast , ' - ' , TMI_ROLES.Role) AS NameFull_Role ,
 			CONCAT(RECORDS_MEMBERS.namefirst , " " , RECORDS_MEMBERS.namelast , ' - ' , RECORDS_MEMBER_UNAVAILABILITY.rolesID) AS NameFull_RoleID
 	FROM RECORDS_MEMBER_UNAVAILABILITY
