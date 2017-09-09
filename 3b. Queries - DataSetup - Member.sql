@@ -1,12 +1,12 @@
 
 -- SET PARAMETERS
 
-SET @Club = 'Daybreak Toastmasters';
-SET @currentclubs = 'Daybreak Toastmasters';
+SET @Club = 'Corporate Toastmasters';
+SET @currentclubs = 'Corporate Toastmasters';
 SET @QualificationStatus1 = 'In progress';
 SET @QualificationStatus2 = 'Completed';
 SET @CurrentMember = 'Yes';
-SET @NameFull = 'Bryn Thomson';
+SET @NameFull = 'Suyog Belbase';
 
 
 -- ========================  TX_QUALIFICATIONS ========================

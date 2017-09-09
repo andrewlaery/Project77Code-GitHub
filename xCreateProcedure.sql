@@ -4,31 +4,34 @@
 SET @Role = 'General Evaluator';
 
 DELIMITER //
-	CREATE PROCEDURE P_TEST()
+	CREATE PROCEDURE P_TEST (IN _START INTEGER , IN _LIMIT INTEGER)
+
 		BEGIN
-			SELECT
-				  MembersID ,
-				  NameFull ,
-				  Track ,
-				  QualificationsID ,
-				  QualificationsOrder ,
-				  Qualification ,
-				  ManualGroupsOrder ,
-				  ManualGroup ,
-				  ManualsOrder ,
-				  Manual ,
-				  ProjectsOrder ,
-				  ProjectsID ,
-				  Project ,
-				  Role ,
-				  Date1 ,
-				  QualificationStatus
-			  FROM V_MOSTRECENTPROJECT0
-              WHERE Role = @Role
-			  ORDER BY NameFull , QualificationsOrder , ManualGroupsOrder , ManualsOrder , ProjectsOrder;
+			PREPARE STMT FROM
+				" SELECT * FROM TTX_MOSTRECENTPROJECT0 LIMIT ? ,?" ;
+			SET @START = _START;
+	    SET @LIMIT = _LIMIT;
+	    EXECUTE STMT USING @START, @LIMIT;
+	    DEALLOCATE PREPARE STMT;
 		END //
 DELIMITER ;
 
 CALL P_TEST;
 
 DROP PROCEDURE P_TEST;
+
+
+
+DELIMITER //
+
+  CREATE PROCEDURE `some_proc` (IN _START INTEGER , IN _LIMIT INTEGER)
+
+  BEGIN
+    PREPARE STMT FROM " SELECT * FROM products LIMIT ?,? ";
+    SET @START = _START;
+    SET @LIMIT = _LIMIT;
+    EXECUTE STMT USING @START, @LIMIT;
+    DEALLOCATE PREPARE STMT;
+  END //
+
+DELIMITER ;
