@@ -11,55 +11,115 @@ SET @CurrentMember = 'Yes';
 -- ========================  CURRENT MEMBERS ========================
 
 -- List of current memebers
-DROP TEMPORARY TABLE IF EXISTS TX_CURRENTMEMBERS1;
-CREATE TEMPORARY TABLE TX_CURRENTMEMBERS1 AS
-    SELECT
-			currentclubs AS CurrentClub ,
-            NameFull
-    FROM TX_ALLMEMBERS0
-    WHERE
-        (currentclubs = @currentclubs)
-        AND (currentmember = @currentmember);
-SELECT * FROM TX_CURRENTMEMBERS1 ORDER BY NameFull;
+
+DROP TABLE IF EXISTS TX_CURRENTMEMBERS1;
+CREATE TABLE TX_CURRENTMEMBERS1
+    (
+      id SERIAL ,
+
+      NameFull VARCHAR(255) ,
+      MembersID INT ,
+      CurrentClub VARCHAR(255)
+    );
+
+INSERT INTO TX_CURRENTMEMBERS1
+    (
+      NameFull ,
+      MembersID ,
+      CurrentClub
+    )
+  SELECT
+    NameFull ,
+    MembersID ,
+    currentclubs
+  FROM TX_ALLMEMBERS0
+  WHERE
+    (currentmember = @currentmember)
+    AND (currentclubs = @currentclubs)
+	ORDER BY NameFull;
+
+SELECT * FROM TX_CURRENTMEMBERS1;
 
 
 -- ========================  TX_QUALIFICATIONS ========================
 
--- List of current members TMI Qualifications:
-DROP TEMPORARY TABLE IF EXISTS TX_QUALIFICATIONS1;
-CREATE TEMPORARY TABLE TX_QUALIFICATIONS1 AS
-    SELECT
-			Club ,
-            NameFull ,
-			Track ,
-			QualificationShort ,
-			QualificationStatus
-    FROM TX_QUALIFICATIONS0
-    WHERE
-        (Club = @Club)
-        AND (CurrentMember = @CurrentMember)
-        AND ((QualificationStatus = @QualificationStatus1) OR (QualificationStatus = @QualificationStatus2))
-		ORDER BY NameFull , QualificationsOrder;
-SELECT * FROM TX_QUALIFICATIONS1;
+DROP TABLE IF EXISTS TX_QUALIFICATIONS1;
+CREATE TABLE TX_QUALIFICATIONS1
+    (
+      id SERIAL ,
+
+      NameFull VARCHAR(255) ,
+      MembersID INT ,
+      Qualification VARCHAR(255) ,
+      QualificationShort VARCHAR(255) ,
+      QualificationStatus VARCHAR(255)
+    );
+
+INSERT INTO TX_QUALIFICATIONS1
+    (
+      NameFull ,
+      MembersID ,
+      Qualification ,
+      QualificationShort ,
+      QualificationStatus
+    )
+  SELECT
+    NameFull ,
+    MembersID ,
+    Qualification ,
+    QualificationShort ,
+    QualificationStatus
+  FROM TX_QUALIFICATIONS0
+  WHERE
+    (currentmember = @currentmember)
+    AND (Club = @Club)
+	ORDER BY NameFull , QualificationsOrder;
+
+-- SELECT * FROM TX_QUALIFICATIONS1;
+
 
 
 -- ========================  TX_RECORDS_PROJECTS ========================
-
-
 -- Lists projects including duplicates + Qualification Status: from SET Club and Current Member
-DROP TEMPORARY TABLE IF EXISTS TX_RECORDS_PROJECTS1;
-CREATE TEMPORARY TABLE TX_RECORDS_PROJECTS1 AS
+
+SET @Club = 'Corporate Toastmasters';
+SET @currentclubs = 'Corporate Toastmasters';
+SET @QualificationStatus1 = 'In progress';
+SET @QualificationStatus2 = 'Completed';
+SET @CurrentMember = 'Yes';
+
+DROP TABLE IF EXISTS TX_RECORDS_PROJECTS1;
+CREATE TABLE TX_RECORDS_PROJECTS1
+    (
+      id SERIAL ,
+
+      RP_ID bigint(40) unsigned ,
+      NameFull VARCHAR(255) ,
+      QualificationShort VARCHAR(255) ,
+      Manual VARCHAR(255) ,
+      Project VARCHAR(255) ,
+      Role VARCHAR(255) ,
+      Date1 DATE
+    );
+
+INSERT INTO TX_RECORDS_PROJECTS1
+    (
+      RP_ID ,
+      NameFull ,
+      QualificationShort ,
+      Manual ,
+      Project ,
+      Role ,
+      Date1
+    )
 	SELECT
-			RP_ID ,
-			Club ,
-            NameFull ,
-			Track ,
-			QualificationShort ,
-			ManualGroup ,
-			Manual ,
-			Project ,
-			Role ,
-			Date1
+      RP_ID ,
+      NameFull ,
+      QualificationShort ,
+      Manual ,
+      Project ,
+      Role ,
+      Date1
     FROM TX_RECORDS_PROJECTS0
     WHERE
         (Club = @Club)
@@ -70,21 +130,40 @@ CREATE TEMPORARY TABLE TX_RECORDS_PROJECTS1 AS
 SELECT * FROM TX_RECORDS_PROJECTS1;
 
 
+
 -- ========================  TX_MOSTRECENTPROJECT 0-1 ========================
 
 -- Lists members most recent projects excluding duplicates: from SET Club and Current Member
-DROP TEMPORARY TABLE IF EXISTS TX_MOSTRECENTPROJECT1;
-CREATE TEMPORARY TABLE TX_MOSTRECENTPROJECT1 AS
+
+DROP TABLE IF EXISTS TX_MOSTRECENTPROJECT1;
+CREATE TABLE TX_MOSTRECENTPROJECT1
+    (
+      id SERIAL ,
+
+      NameFull VARCHAR(255) ,
+      QualificationShort VARCHAR(255) ,
+      Manual VARCHAR(255) ,
+      Project VARCHAR(255) ,
+      Role VARCHAR(255) ,
+      Date1 DATE
+    );
+
+INSERT INTO TX_MOSTRECENTPROJECT1
+      (
+        NameFull ,
+        QualificationShort ,
+        Manual ,
+        Project ,
+        Role ,
+        Date1
+      )
     SELECT
-				Club ,
-                NameFull ,
-				Track ,
-				QualificationShort ,
-				ManualGroup ,
-				Manual ,
-				Project ,
-				Role ,
-				Date1
+        NameFull ,
+        QualificationShort ,
+        Manual ,
+        Project ,
+        Role ,
+        Date1
       FROM TX_MOSTRECENTPROJECT0
       WHERE
           (Club = @Club)
@@ -96,11 +175,23 @@ SELECT * FROM TX_MOSTRECENTPROJECT1;
 
 -- ========================  TX_MOSTRECENTROLE 0-1 ========================
 
+DROP TABLE IF EXISTS TX_MOSTRECENTROLE1;
+CREATE TABLE TX_MOSTRECENTROLE1
+      (
+        id SERIAL ,
 
-DROP TEMPORARY TABLE IF EXISTS TX_MOSTRECENTROLE1;
-CREATE TEMPORARY TABLE TX_MOSTRECENTROLE1 AS
+        NameFull VARCHAR(255) ,
+        Role VARCHAR(255) ,
+        Date1 DATE
+      );
+
+INSERT INTO TX_MOSTRECENTROLE1
+      (
+        NameFull ,
+        Role ,
+        Date1
+      )
     SELECT
-					Club ,
           NameFull ,
 					Role ,
 					Date1
@@ -110,5 +201,5 @@ CREATE TEMPORARY TABLE TX_MOSTRECENTROLE1 AS
             AND (CurrentMember = @CurrentMember)
             AND (Qualification <> 'No qualification')
             AND (Role <> 'No role')
-        ORDER BY NameFull , RolesOrder , Date1Num;
+        ORDER BY RolesOrder , Date1Num , NameFull ;
 SELECT * FROM TX_MOSTRECENTROLE1;

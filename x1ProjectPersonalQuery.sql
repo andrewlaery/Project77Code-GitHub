@@ -1,22 +1,38 @@
-SET @Role = 'Speaker';
-SET @NameFull = 'Daniel Bates';
-
-SELECT
-		ProjectsID ,
-        ProjectsOrder ,
-        Project
-FROM TX_TMI_STRUCTURE0
-WHERE Role = @Role
-ORDER by ProjectsOrder;
+SET @Role = 'General Evaluator';
+SET @NameFull = 'Mark Hornblow';
 
 SELECT
 	NameFull ,
+    QualificationsID ,
     QualificationShort ,
+    QualificationStatus
+FROM TX_QUALIFICATIONS0
+WHERE
+	NameFull = @NameFull;
+
+
+SELECT
+	QualificationShort ,
+	ManualsID ,
+    Manual ,
     ProjectsID ,
-    ProjectsOrder ,
-    Project
+	ProjectsOrder ,
+	Project ,
+    Role
+FROM TX_TMI_STRUCTURE0
+WHERE Role = @Role
+ORDER BY QualificationsOrder , ManualsOrder , ProjectsOrder;
+
+SELECT
+	NameFull ,
+	QualificationShort ,
+	ManualsID ,
+    Manual ,
+    ProjectsID ,
+	ProjectsOrder ,
+	Project
 FROM TX_MOSTRECENTPROJECT0
 WHERE
-NameFull = @NameFull
-AND Role = @Role
-ORDER BY ProjectsOrder;
+	NameFull = @NameFull
+	AND Role = @Role
+ORDER BY QualificationsOrder , ManualsOrder , ProjectsOrder;
