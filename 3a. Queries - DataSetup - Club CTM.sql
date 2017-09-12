@@ -175,6 +175,7 @@ CREATE TABLE TX_MOSTRECENTROLE1_CTM
       (
         id SERIAL ,
 
+        MembersID bigint(40) unsigned ,
         NameFull VARCHAR(255) ,
         Role VARCHAR(255) ,
         Date1 DATE
@@ -182,11 +183,13 @@ CREATE TABLE TX_MOSTRECENTROLE1_CTM
 
 INSERT INTO TX_MOSTRECENTROLE1_CTM
       (
+        MembersID ,
         NameFull ,
         Role ,
         Date1
       )
     SELECT
+          MembersID ,
           NameFull ,
 					Role ,
 					Date1
