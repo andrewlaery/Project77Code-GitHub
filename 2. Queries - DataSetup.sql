@@ -229,6 +229,7 @@ CREATE TABLE TX_RECORDS_PROJECTS0
 		Status1 VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 		Club VARCHAR(255) ,
+		ClubsID INT ,
 
 		NameFull_QualificationsID VARCHAR(255) ,
 		NameFull_Qualification VARCHAR(255) ,
@@ -278,6 +279,7 @@ INSERT INTO TX_RECORDS_PROJECTS0
 			Status1 ,
 			CurrentMember ,
 			Club ,
+			ClubsID ,
 
 			NameFull_QualificationsID ,
 			NameFull_Qualification ,
@@ -325,6 +327,7 @@ INSERT INTO TX_RECORDS_PROJECTS0
 		RECORDS_PROJECTS.itemstatus ,
 		RECORDS_MEMBERS.currentmember ,
 		RECORDS_CLUBS.name ,
+		RECORDS_CLUBS.id ,
 
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.qualificationsID) ,
 		CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , " - " , TX_TMI_STRUCTURE0.qualification) ,
@@ -351,6 +354,7 @@ CREATE TABLE TX_MOSTRECENTPROJECT_SETUP1
 
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
+		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 		Track VARCHAR(255) ,
@@ -389,6 +393,7 @@ INSERT INTO TX_MOSTRECENTPROJECT_SETUP1
 		(
 			MembersID ,
 			NameFull ,
+			ClubsID ,
 			Club ,
 			CurrentMember ,
 			Track ,
@@ -425,6 +430,7 @@ INSERT INTO TX_MOSTRECENTPROJECT_SETUP1
   SELECT
 		MembersID ,
 		NameFull ,
+		ClubsID ,
 		Club ,
 		CurrentMember ,
 		Track ,
@@ -489,6 +495,7 @@ CREATE TABLE TX_MOSTRECENTPROJECT0
 
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
+		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 		Track VARCHAR(255) ,
@@ -527,6 +534,7 @@ INSERT INTO TX_MOSTRECENTPROJECT0
 		(
 			MembersID ,
 			NameFull ,
+			ClubsID ,
 			Club ,
 			CurrentMember ,
 			Track ,
@@ -563,6 +571,7 @@ INSERT INTO TX_MOSTRECENTPROJECT0
 SELECT
 	MembersID ,
 	NameFull ,
+	ClubsID ,
 	Club ,
 	CurrentMember ,
 	Track ,
@@ -614,6 +623,7 @@ CREATE TABLE TX_MOSTRECENTROLE_SETUP1
 
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
+		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 
@@ -642,6 +652,7 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP1
 		(
 			MembersID,
 			NameFull ,
+			ClubsID ,
 			Club ,
 			CurrentMember ,
 
@@ -668,6 +679,7 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP1
 	SELECT
 		MembersID,
 		NameFull ,
+		ClubsID ,
 		Club ,
 		CurrentMember ,
 
@@ -702,6 +714,7 @@ CREATE TABLE TX_MOSTRECENTROLE_SETUP2
 
 			MembersID bigint(40) unsigned ,
 			NameFull VARCHAR(255) ,
+			ClubsID INT ,
 			Club VARCHAR(255) ,
 			CurrentMember VARCHAR(255) ,
 
@@ -730,6 +743,7 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP2
 		(
 			MembersID,
 			NameFull ,
+			ClubsID ,
 			Club ,
 			CurrentMember ,
 
@@ -756,6 +770,7 @@ INSERT INTO TX_MOSTRECENTROLE_SETUP2
   SELECT
 			MembersID,
 			NameFull ,
+			ClubsID ,
 			Club ,
 			CurrentMember ,
 
@@ -789,6 +804,7 @@ CREATE TABLE TX_MOSTRECENTROLE0
 
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
+		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 
@@ -817,6 +833,7 @@ INSERT INTO TX_MOSTRECENTROLE0
 			(
 				MembersID,
 				NameFull ,
+				ClubsID ,
 				Club ,
 				CurrentMember ,
 
@@ -843,6 +860,7 @@ INSERT INTO TX_MOSTRECENTROLE0
     SELECT
 			TX_MOSTRECENTROLE_SETUP1.MembersID ,
 			TX_MOSTRECENTROLE_SETUP1.NameFull ,
+			TX_MOSTRECENTROLE_SETUP1.ClubsID ,
 			TX_MOSTRECENTROLE_SETUP1.Club ,
 			TX_MOSTRECENTROLE_SETUP1.CurrentMember ,
 
@@ -887,6 +905,8 @@ CREATE TABLE TX_ALLMEMBERS0
 
 		MembersID bigint(40) unsigned ,
 		NameFull VARCHAR(255) ,
+
+		ClubsID INT ,
 		currentclubs VARCHAR(255) ,
 		currentmember VARCHAR(255)
 	);
@@ -895,12 +915,16 @@ INSERT INTO TX_ALLMEMBERS0
 		(
 			MembersID ,
 			NameFull ,
+
+			ClubsID ,
 			currentclubs ,
 			currentmember
 		)
 		SELECT
 			id ,
 			CONCAT(RECORDS_MEMBERS.namefirst , ' ' , RECORDS_MEMBERS.namelast) AS NameFull,
+
+			ClubsID ,
 			currentclubs ,
 			currentmember
     FROM RECORDS_MEMBERS
