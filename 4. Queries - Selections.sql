@@ -39,15 +39,15 @@ CREATE TABLE TX_FORECAST_SELECTIONS0
 (
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		Qualification VARCHAR(255) ,
-		ProjectsID  bigint(40) unsigned ,
+		ProjectsID  INT ,
 		Project VARCHAR(255) ,
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		Role VARCHAR(255) ,
-		ClubsID bigint(40) unsigned ,
+		ClubsID INT ,
 		ItemStatus VARCHAR(255) NOT NULL DEFAULT 'forecast'	,
 		ProjectDate DATE ,
 		Comments VARCHAR(255) ,
@@ -77,14 +77,14 @@ SET @RolesID = '1';
 
 -- Create a count of how many roles a member is doing at ths forecast meeting from the Forecast Table and uses the count as a RankAdder.
 -- THe SET statement solves Error 1140 and 1155.
--- SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 DROP TABLE IF EXISTS TX_FORECAST_SELECTION_COUNT0;
 CREATE TABLE TX_FORECAST_SELECTION_COUNT0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255),
 		RankAdder INT
 	);
@@ -114,9 +114,9 @@ CREATE TABLE TX_RECORDS_MEMBER_UNAVAILABILITY1
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		Role VARCHAR(255) ,
 		StartDate DATE ,
 		EndDate DATE ,
@@ -162,7 +162,7 @@ CREATE TABLE TX_RECORDS_MEMBER_AVAILABLE1
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255)
 	);
 
@@ -189,7 +189,7 @@ CREATE TABLE TX_MOSTRECENTROLE_ALLRANK0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 		Club VARCHAR(255) ,
 		Date1 Date ,
@@ -207,15 +207,15 @@ INSERT INTO TX_MOSTRECENTROLE_ALLRANK0
 		DateToRank
 	)
 	SELECT
-		TX_CURRENTMEMBERS1_CTM.MembersID AS MembersID ,
-		TX_CURRENTMEMBERS1_CTM.NameFull AS NameFull ,
-		TX_CURRENTMEMBERS1_CTM.CurrentClub AS Club ,
-		IFNULL(TX_MOSTRECENTROLE1_CTM.Date1,'1900-01-01') AS Date1 ,
+		TX_CURRENTMEMBERS1.MembersID AS MembersID ,
+		TX_CURRENTMEMBERS1.NameFull AS NameFull ,
+		TX_CURRENTMEMBERS1.CurrentClub AS Club ,
+		IFNULL(TX_MOSTRECENTROLE1.Date1,'1900-01-01') AS Date1 ,
 		IFNULL(TX_FORECAST_SELECTION_COUNT0.RankAdder,'1') AS RankAdder ,
-		IFNULL(TX_MOSTRECENTROLE1_CTM.Date1 + IFNULL(TX_FORECAST_SELECTION_COUNT0.RankAdder,'1'),'1') AS DateToRank
-	FROM TX_CURRENTMEMBERS1_CTM
-	LEFT JOIN TX_MOSTRECENTROLE1_CTM ON CONCAT(TX_MOSTRECENTROLE1_CTM.NameFull, ' - ' , Role) = CONCAT(TX_CURRENTMEMBERS1_CTM.NameFull, ' - ' , @Role1)
-	LEFT JOIN TX_FORECAST_SELECTION_COUNT0 ON TX_FORECAST_SELECTION_COUNT0.MembersID = TX_MOSTRECENTROLE1_CTM.MembersID
+		IFNULL(TX_MOSTRECENTROLE1.Date1 + IFNULL(TX_FORECAST_SELECTION_COUNT0.RankAdder,'1'),'1') AS DateToRank
+	FROM TX_CURRENTMEMBERS1
+	LEFT JOIN TX_MOSTRECENTROLE1 ON CONCAT(TX_MOSTRECENTROLE1.NameFull, ' - ' , Role) = CONCAT(TX_CURRENTMEMBERS1.NameFull, ' - ' , @Role1)
+	LEFT JOIN TX_FORECAST_SELECTION_COUNT0 ON TX_FORECAST_SELECTION_COUNT0.MembersID = TX_CURRENTMEMBERS1.MembersID
 	-- WHERE
 		-- Role = @Role1
 		-- AND Club = @Club
@@ -229,7 +229,7 @@ CREATE TABLE TX_MOSTRECENTROLE_AVAILABLERANK0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 		Date1 Date ,
 		RankAdder INT ,
@@ -262,7 +262,7 @@ CREATE TABLE TX_ROLESELECTION0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255)
 	);
 
@@ -314,7 +314,7 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255),
 			RankAdder INT
 		);
@@ -344,9 +344,9 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255) ,
-			RolesID bigint(40) unsigned ,
+			RolesID INT ,
 			Role VARCHAR(255) ,
 			StartDate DATE ,
 			EndDate DATE ,
@@ -392,7 +392,7 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255)
 		);
 
@@ -419,7 +419,7 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255) ,
 			Club VARCHAR(255) ,
 			Date1 Date ,
@@ -437,15 +437,15 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 			DateToRank
 		)
 		SELECT
-			TX_CURRENTMEMBERS1_CTM.MembersID AS MembersID ,
-			TX_CURRENTMEMBERS1_CTM.NameFull AS NameFull ,
-			TX_CURRENTMEMBERS1_CTM.CurrentClub AS Club ,
-			IFNULL(TX_MOSTRECENTROLE1_CTM.Date1,'1900-01-01') AS Date1 ,
+			TX_CURRENTMEMBERS1.MembersID AS MembersID ,
+			TX_CURRENTMEMBERS1.NameFull AS NameFull ,
+			TX_CURRENTMEMBERS1.CurrentClub AS Club ,
+			IFNULL(TX_MOSTRECENTROLE1.Date1,'1900-01-01') AS Date1 ,
 			IFNULL(TX_FORECAST_SELECTION_COUNT0.RankAdder,'1') AS RankAdder ,
-			IFNULL(TX_MOSTRECENTROLE1_CTM.Date1 + IFNULL(TX_FORECAST_SELECTION_COUNT0.RankAdder,'1'),'1') AS DateToRank
-		FROM TX_CURRENTMEMBERS1_CTM
-		LEFT JOIN TX_MOSTRECENTROLE1_CTM ON CONCAT(TX_MOSTRECENTROLE1_CTM.NameFull, ' - ' , Role) = CONCAT(TX_CURRENTMEMBERS1_CTM.NameFull, ' - ' , @Role1)
-		LEFT JOIN TX_FORECAST_SELECTION_COUNT0 ON TX_FORECAST_SELECTION_COUNT0.MembersID = TX_MOSTRECENTROLE1_CTM.MembersID
+			IFNULL(TX_MOSTRECENTROLE1.Date1 + IFNULL(TX_FORECAST_SELECTION_COUNT0.RankAdder,'1'),'1') AS DateToRank
+		FROM TX_CURRENTMEMBERS1
+		LEFT JOIN TX_MOSTRECENTROLE1 ON CONCAT(TX_MOSTRECENTROLE1.NameFull, ' - ' , Role) = CONCAT(TX_CURRENTMEMBERS1.NameFull, ' - ' , @Role1)
+		LEFT JOIN TX_FORECAST_SELECTION_COUNT0 ON TX_FORECAST_SELECTION_COUNT0.MembersID = TX_CURRENTMEMBERS1.MembersID
 		-- WHERE
 			-- Role = @Role1
 			-- AND Club = @Club
@@ -459,7 +459,7 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255) ,
 			Date1 Date ,
 			RankAdder INT ,
@@ -492,7 +492,7 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255)
 		);
 
@@ -527,5 +527,6 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 			@ClubsID AS ClubsID,
 			@ProjectDate AS ProjectDate
 		FROM TX_ROLESELECTION0;
+
 
 SELECT * FROM TX_FORECAST_SELECTIONS0;
