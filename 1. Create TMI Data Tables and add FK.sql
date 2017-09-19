@@ -24,16 +24,16 @@ INSERT INTO TMI_TRACKS ( track , tmiorder , createdby ) VALUES ( 'No Track'  , '
 SELECT * FROM TMI_TRACKS ;
 
 DROP TABLE IF EXISTS TMI_QUALIFICATIONS ;
-CREATE TABLE TMI_QUALIFICATIONS ( id Serial , qualification VARCHAR(255) , qualificationshort bigint(40) unsigned , tracksID bigint(40) unsigned , tmiorder INT , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Competent Communicator'  , 'CC' , '1' , '1' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Communicator Bronze'  , 'ACB' , '1' , '2' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Communicator Silver'  , 'ACS' , '1' , '3' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Communicator Gold'  , 'ACG' , '1' , '4' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Competent Leader'  , 'CL' , '2' , '5' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Leader Bronze'  , 'ALB' , '2' , '6' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Leader Silver'  , 'ALS' , '2' , '7' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'Distingushed Toastmaster'  , 'DTM' , '2' , '8' , 'bulk' );
-INSERT INTO TMI_QUALIFICATIONS ( qualification , qualificationshort , tracksID , tmiorder , createdby ) VALUES ( 'No qualification'  , 'NOQ' , '3' , '9' , 'bulk' );
+CREATE TABLE TMI_QUALIFICATIONS ( id Serial , qualification VARCHAR(255) , tracksID bigint(40) unsigned , tmiorder INT , created TIMESTAMP DEFAULT CURRENT_TIMESTAMP , createdby VARCHAR(255) , updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP , updatedby VARCHAR(255) );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Competent Communicator'  , '1' , '1' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Communicator Bronze'  , '1' , '2' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Communicator Silver'  , '1' , '3' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Communicator Gold'  , '1' , '4' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Competent Leader'  , '2' , '5' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Leader Bronze'  , '2' , '6' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Advanced Leader Silver'  , '2' , '7' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'Distingushed Toastmaster'  , '2' , '8' , 'bulk' );
+INSERT INTO TMI_QUALIFICATIONS ( qualification , tracksID , tmiorder , createdby ) VALUES ( 'No qualification'  , '3' , '9' , 'bulk' );
 SELECT * FROM TMI_QUALIFICATIONS ;
 
 
@@ -375,7 +375,7 @@ SELECT * FROM TMI_ROLES ;
 
 /*==========================================================================================
 ADD FORGIEGN KEY"S TO TABLES
-=========================================================================================*
+=========================================================================================*/
 
 ALTER TABLE TMI_PROJECTS
 	ADD FOREIGN KEY ( manualsID ) REFERENCES TMI_MANUALS ( id ) ,
@@ -394,7 +394,7 @@ ALTER TABLE TMI_QUALS_MANUALGROUPS
    	ADD FOREIGN KEY ( qualificationID ) REFERENCES TMI_QUALIFICATIONS ( id ),
    	ADD FOREIGN KEY ( manual_groupID ) REFERENCES TMI_MANUAL_GROUPS ( id );
 
-==========================================================================================
+/*==========================================================================================
 SELECT STATEMENT CONNECTING ALL TABLES
 =========================================================================================*/
 
