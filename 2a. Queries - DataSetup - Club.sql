@@ -20,7 +20,8 @@ CREATE TABLE TX_CURRENTMEMBERS1
       MembersID INT ,
       NameFull VARCHAR(255) ,
       ClubsID INT ,
-      CurrentClub VARCHAR(255)
+      CurrentClub VARCHAR(255) ,
+      CurrentMember VARCHAR(255)
     );
 
 INSERT INTO TX_CURRENTMEMBERS1
@@ -28,13 +29,15 @@ INSERT INTO TX_CURRENTMEMBERS1
       MembersID ,
       NameFull ,
       ClubsID ,
-      CurrentClub
+      CurrentClub ,
+      CurrentMember
     )
     SELECT
       MembersID ,
       NameFull ,
       ClubsID ,
-      currentclubs
+      currentclubs ,
+      CurrentMember
     FROM TX_ALLMEMBERS0
     ORDER BY ClubsID , NameFull;
 
