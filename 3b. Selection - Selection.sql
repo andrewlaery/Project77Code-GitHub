@@ -7,7 +7,7 @@ SET @currentclubs = 'Corporate Toastmasters';
 SET @Club = @currentclubs;
 SET @ClubsID = '2';
 SET @CurrentMember = 'Yes';
-SET @ProjectDate = '2017-09-27';
+SET @ProjectDate = '2017-10-11';
 SET @UnavailableAllRoles = '41';
 SET @ItemStatus = 'Forecast';
 
