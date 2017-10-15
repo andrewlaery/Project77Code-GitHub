@@ -50,7 +50,7 @@ BEGIN
 	    FROM TX_FORECAST_SELECTIONS0
 	    WHERE
 	        (ClubsID = @ClubsID)
-	        AND (ProjectDate = @ProjectDate)
+	        AND (MeetingDate = @MeetingDate)
 					AND ItemStatus <> 'Actual'
 	    GROUP BY MembersID;
 	-- SELECT * FROM TX_FORECAST_SELECTION_COUNT0;
@@ -68,6 +68,7 @@ BEGIN
 			Role VARCHAR(255) ,
 			StartDate DATE ,
 			EndDate DATE ,
+			Reason VARCHAR(255) ,
 			Notes VARCHAR(255) ,
 			NameFull_Role VARCHAR(255) ,
 			NameFull_RoleID VARCHAR(255)
@@ -81,6 +82,7 @@ BEGIN
 			Role ,
 			StartDate ,
 			EndDate ,
+			Reason ,
 			Notes ,
 			NameFull_Role ,
 			NameFull_RoleID
@@ -92,13 +94,14 @@ BEGIN
 			Role ,
 			StartDate ,
 			EndDate ,
+			Reason ,
 			Notes ,
 			NameFull_Role ,
 			NameFull_RoleID
 		 FROM TX_RECORDS_MEMBER_UNAVAILABILITY0
 			WHERE
-				StartDate <= @ProjectDate
-				AND  EndDate >= @ProjectDate
+				StartDate <= @MeetingDate
+				AND  EndDate >= @MeetingDate
 				AND (RolesID = @UnavailableAllRoles OR Role = @Role1);
 	-- SELECT * FROM TX_RECORDS_MEMBER_UNAVAILABILITY1;
 
@@ -225,7 +228,7 @@ BEGIN
 			RolesID ,
 			Role,
 			clubsID ,
-			ProjectDate
+			MeetingDate
 		)
 		SELECT
 			MembersID AS MembersID,
@@ -233,7 +236,7 @@ BEGIN
 			@RolesID AS RolesID,
 			@Role1 AS Role,
 			@ClubsID AS ClubsID,
-			@ProjectDate AS ProjectDate
+			@MeetingDate AS MeetingDate
 		FROM TX_ROLESELECTION0;
 
 END //

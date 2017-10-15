@@ -7,7 +7,7 @@ SET @currentclubs = 'Corporate Toastmasters';
 SET @Club = @currentclubs;
 SET @ClubsID = '2';
 SET @CurrentMember = 'Yes';
-SET @ProjectDate = '2017-10-11';
+SET @MeetingDate = '2017-10-11';
 SET @UnavailableAllRoles = '41';
 SET @ItemStatus = 'Forecast';
 
@@ -29,7 +29,7 @@ CREATE TABLE TX_FORECAST_SELECTIONS0
 		Role VARCHAR(255) ,
 		ClubsID INT ,
 		ItemStatus VARCHAR(255) NOT NULL DEFAULT 'forecast'	,
-		ProjectDate DATE ,
+		MeetingDate DATE ,
 		Comments VARCHAR(255) ,
 
 		Created DATE ,
@@ -47,7 +47,7 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 			RolesID ,
 			ClubsID ,
 			ItemStatus ,
-			ProjectDate ,
+			MeetingDate ,
 			Comments
 		)
 		SELECT
@@ -57,11 +57,11 @@ INSERT INTO TX_FORECAST_SELECTIONS0
 			RolesID ,
 			ClubsID ,
 			ItemStatus ,
-			ProjectDate ,
+			MeetingDate ,
 			Comments
 		FROM RECORDS_PROJECTS
 		WHERE ItemStatus <> 'Actual'
-		AND ProjectDate = @ProjectDate
+		AND MeetingDate = @MeetingDate
 		AND ClubsID = @ClubsID;
 
 SET SQL_SAFE_UPDATES = 0;
