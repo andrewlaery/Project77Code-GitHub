@@ -108,7 +108,7 @@ CREATE VIEW V_RECORDS_PROJECTS0 AS
 		TMI_ROLES.tmiorder AS RolesOrder ,
 		TMI_ROLES.role AS Role ,
 
-		RECORDS_PROJECTS.projectdate AS Date1 ,
+		RECORDS_PROJECTS.MeetingDate AS Date1 ,
 		RECORDS_PROJECTS.itemstatus AS Status1 ,
 		RECORDS_MEMBERS.currentmember AS CurrentMember ,
 		RECORDS_CLUBS.name AS Club ,
@@ -273,6 +273,7 @@ CREATE VIEW V_MOSTRECENTROLE0 AS
         (b.NameFull_Role IS NULL)
     ORDER BY RolesOrder , Date1Num , NameFull;
 
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 DROP VIEW IF EXISTS V_MOSTRECENTROLE1;
 CREATE VIEW V_MOSTRECENTROLE1 AS
     SELECT *
