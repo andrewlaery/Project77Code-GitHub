@@ -8,28 +8,28 @@ CREATE TABLE TX_TMI_STRUCTURE0
 	(
 		id Serial ,
 
-		TracksID bigint(40) unsigned ,
+		TracksID INT ,
 		TracksOrder INT ,
 		Track VARCHAR(255) ,
 
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 
-		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsID INT ,
 		ManualGroupsOrder INT ,
 		ManualGroup VARCHAR(255) ,
 
-		ManualsID bigint(40) unsigned ,
+		ManualsID INT ,
 		ManualsOrder INT ,
 		Manual VARCHAR(255) ,
 
-		ProjectsID bigint(40) unsigned ,
+		ProjectsID INT ,
 		ProjectsOrder INT ,
 		Project VARCHAR(255) ,
 
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
 
@@ -114,14 +114,14 @@ CREATE TABLE TX_QUALIFICATIONS0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 
-		TracksID bigint(40) unsigned ,
+		TracksID INT ,
 		TracksOrder INT ,
 		Track VARCHAR(255) ,
 
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
@@ -194,35 +194,35 @@ CREATE TABLE TX_RECORDS_PROJECTS0
 	(
 		id SERIAL ,
 
-		RP_ID bigint(40) unsigned ,
-		MembersID bigint(40) unsigned ,
+		RP_ID INT ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 
-		TracksID bigint(40) unsigned ,
+		TracksID INT ,
 		TracksOrder INT ,
 		Track VARCHAR(255) ,
 
-		RP_QualificationsID bigint(40) unsigned ,
-		QualificationsID bigint(40) unsigned ,
+		RP_QualificationsID INT ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 
-		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsID INT ,
 		ManualGroupsOrder INT ,
 		ManualGroup VARCHAR(255) ,
 
-		ManualsID bigint(40) unsigned ,
+		ManualsID INT ,
 		ManualsOrder INT ,
 		Manual VARCHAR(255) ,
 
-		RP_ProjectsID bigint(40) unsigned ,
-		ProjectsID bigint(40) unsigned ,
+		RP_ProjectsID INT ,
+		ProjectsID INT ,
 		ProjectsOrder INT ,
 		Project VARCHAR(255) ,
 
-		RP_RolesID bigint(40) unsigned ,
-		RolesID bigint(40) unsigned ,
+		RP_RolesID INT ,
+		RolesID INT ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
 
@@ -355,7 +355,7 @@ INSERT INTO TX_RECORDS_PROJECTS0
 	LEFT JOIN TX_TMI_STRUCTURE0 ON TX_TMI_STRUCTURE0.QualificationProject = CONCAT(RECORDS_PROJECTS.qualificationsID , '-' , RECORDS_PROJECTS.projectsID)
 	LEFT JOIN RECORDS_CLUBS ON RECORDS_CLUBS.id = RECORDS_MEMBERS.clubsID
 	LEFT JOIN TX_QUALIFICATIONS0 ON TX_QUALIFICATIONS0.NameFull_QualificationsID = CONCAT(RECORDS_MEMBERS.NameFirst , ' ' , RECORDS_MEMBERS.NameLast , ' - ' , TX_TMI_STRUCTURE0.qualificationsID)
-	WHERE RECORDS_PROJECTS.itemstatus = 'actual';
+	WHERE RECORDS_PROJECTS.itemstatus = 'actual' OR RECORDS_PROJECTS.itemstatus = 'forecast';
 SELECT * FROM TX_RECORDS_PROJECTS0;
 
 -- ========================  MOSTRECENTPROJECT ========================
@@ -368,32 +368,32 @@ CREATE TABLE TX_MOSTRECENTPROJECT_SETUP1
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 		Track VARCHAR(255) ,
 
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 		QualificationStatus VARCHAR(255) ,
 
-		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsID INT ,
 		ManualGroupsOrder INT ,
 		ManualGroup VARCHAR(255) ,
 
-		ManualsID bigint(40) unsigned ,
+		ManualsID INT ,
 		ManualsOrder INT ,
 		Manual VARCHAR(255) ,
 
-		ProjectsID bigint(40) unsigned ,
+		ProjectsID INT ,
 		ProjectsOrder INT ,
 		Project VARCHAR(255) ,
 
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
 
@@ -518,32 +518,32 @@ CREATE TABLE TX_MOSTRECENTPROJECT0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 		Track VARCHAR(255) ,
 
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 		QualificationStatus VARCHAR(255) ,
 
-		ManualGroupsID bigint(40) unsigned ,
+		ManualGroupsID INT ,
 		ManualGroupsOrder INT ,
 		ManualGroup VARCHAR(255) ,
 
-		ManualsID bigint(40) unsigned ,
+		ManualsID INT ,
 		ManualsOrder INT ,
 		Manual VARCHAR(255) ,
 
-		ProjectsID bigint(40) unsigned ,
+		ProjectsID INT ,
 		ProjectsOrder INT ,
 		Project VARCHAR(255) ,
 
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
 
@@ -659,21 +659,21 @@ CREATE TABLE TX_MOSTRECENTROLE_SETUP1
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 
-		TracksID bigint(40) unsigned ,
+		TracksID INT ,
 		Track VARCHAR(255) ,
 
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
 
@@ -759,21 +759,21 @@ CREATE TABLE TX_MOSTRECENTROLE_SETUP2
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID INT ,
 			NameFull VARCHAR(255) ,
 			ClubsID INT ,
 			Club VARCHAR(255) ,
 			CurrentMember VARCHAR(255) ,
 
-			TracksID bigint(40) unsigned ,
+			TracksID INT ,
 			Track VARCHAR(255) ,
 
-			QualificationsID bigint(40) unsigned ,
+			QualificationsID INT ,
 			QualificationsOrder INT ,
 			Qualification VARCHAR(255) ,
 			QualificationShort VARCHAR(255) ,
 
-			RolesID bigint(40) unsigned ,
+			RolesID INT ,
 			RolesOrder INT ,
 			Role VARCHAR(255) ,
 
@@ -859,21 +859,21 @@ CREATE TABLE TX_MOSTRECENTROLE0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 		ClubsID INT ,
 		Club VARCHAR(255) ,
 		CurrentMember VARCHAR(255) ,
 
-		TracksID bigint(40) unsigned ,
+		TracksID INT ,
 		Track VARCHAR(255) ,
 
-		QualificationsID bigint(40) unsigned ,
+		QualificationsID INT ,
 		QualificationsOrder INT ,
 		Qualification VARCHAR(255) ,
 		QualificationShort VARCHAR(255) ,
 
-		RolesID bigint(40) unsigned ,
+		RolesID INT ,
 		RolesOrder INT ,
 		Role VARCHAR(255) ,
 
@@ -1010,7 +1010,7 @@ CREATE TABLE TX_ALLMEMBERS0
 	(
 		id SERIAL ,
 
-		MembersID bigint(40) unsigned ,
+		MembersID INT ,
 		NameFull VARCHAR(255) ,
 
 		ClubsID INT ,
@@ -1045,10 +1045,10 @@ CREATE TABLE TX_RECORDS_MEMBER_UNAVAILABILITY0
 		(
 			id SERIAL ,
 
-			MembersID bigint(40) unsigned ,
+			MembersID bigint(40) ,
 			NameFull VARCHAR(255) ,
 
-			RolesID bigint(40) unsigned ,
+			RolesID INT ,
 			Role VARCHAR(255) ,
 
 			StartDate DATE ,
@@ -1107,14 +1107,16 @@ DROP TABLE IF EXISTS TX_CONTESTABLE_TMIROLES0;
 CREATE TABLE TX_CONTESTABLE_TMIROLES0
 		(
 			id SERIAL ,
+			RolesID INT ,
 			Role VARCHAR(255)
 		);
 
 INSERT INTO TX_CONTESTABLE_TMIROLES0
 		(
+			RolesID ,
 			Role
 		)
-  SELECT Role
+  SELECT id , Role
   FROM TMI_ROLES
   WHERE contestable = 'Yes';
 SELECT * FROM TX_CONTESTABLE_TMIROLES0;
@@ -1126,18 +1128,36 @@ DROP TABLE IF EXISTS TX_CONTESTABLE_TMIROLES_TO_MEMBERS0;
 CREATE TABLE TX_CONTESTABLE_TMIROLES_TO_MEMBERS0
 		(
 			id SERIAL ,
+			RolesID INT ,
 			Role VARCHAR(255) ,
+			MembersID INT ,
+			NameFull VARCHAR(255) ,
+			ClubsID INT ,
+			CurrentMember VARCHAR(255) ,
+			MembersID_RolesID VARCHAR(255) ,
 			NameFull_Role1 VARCHAR(255)
 		);
 
 INSERT INTO TX_CONTESTABLE_TMIROLES_TO_MEMBERS0
 	(
+		RolesID ,
 		Role ,
+		MembersID ,
+		NameFull ,
+		ClubsID ,
+		CurrentMember ,
+		MembersID_RolesID ,
 		NameFull_Role1
 	)
     SELECT
+			TX_CONTESTABLE_TMIROLES0.RolesID ,
 			TX_CONTESTABLE_TMIROLES0.Role ,
-			CONCAT(TX_ALLMEMBERS0.NameFull , ' - ' , TX_CONTESTABLE_TMIROLES0.Role) AS NameFull_Role1
+			TX_ALLMEMBERS0.MembersID ,
+			TX_ALLMEMBERS0.NameFull ,
+			TX_ALLMEMBERS0.ClubsID ,
+			TX_ALLMEMBERS0.currentmember ,
+			CONCAT(TX_ALLMEMBERS0.MembersID , ' - ' , TX_CONTESTABLE_TMIROLES0.RolesID) ,
+			CONCAT(TX_ALLMEMBERS0.NameFull , ' - ' , TX_CONTESTABLE_TMIROLES0.Role)
     FROM TX_CONTESTABLE_TMIROLES0
     CROSS JOIN TX_ALLMEMBERS0;
 SELECT * FROM TX_CONTESTABLE_TMIROLES_TO_MEMBERS0;

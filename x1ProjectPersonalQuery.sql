@@ -1,4 +1,4 @@
-SET @Role = 'General Evaluator';
+SET @Role = 'Toastmaster';
 SET @NameFull = 'Mark Hornblow';
 
 SELECT
