@@ -249,7 +249,7 @@ CREATE TABLE TX_MOSTRECENTROLE1
     (
       id SERIAL ,
 
-      MembersID bigint(40) unsigned ,
+      MembersID INT ,
       NameFull VARCHAR(255) ,
 
       RolesID INT ,
